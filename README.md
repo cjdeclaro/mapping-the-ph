@@ -48,6 +48,18 @@ You can view the project here:
 
 ---
 
+### 💖 Sponsor This Project
+
+If you find this project useful and want to support its continued development, you can sponsor me through:
+
+- **GitHub Sponsors**: [https://github.com/sponsors/cjdeclaro](https://github.com/sponsors/cjdeclaro)
+- **PayPal**: [https://paypal.me/cjdeclaro?country.x=PH&locale.x=en_US](https://paypal.me/cjdeclaro?country.x=PH&locale.x=en_US)
+
+Your support helps cover server costs, future updates, and more open-source projects like this. Thank you!
+
+---
+
+
 ### 📌 About This Project
 
 A personal project by **Christopher Jay De Claro**  
