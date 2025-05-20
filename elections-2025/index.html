@@ -64,7 +64,8 @@
       </div>
       <div class="col-6 col-sm-3 mb-3">
         <label for="filterProvince" class="form-label">Province</label>
-        <select class="form-select" aria-label="Default select example" id="filterProvince" onchange="loadCityOptions(this.value)" disabled>
+        <select class="form-select" aria-label="Default select example" id="filterProvince"
+          onchange="loadCityOptions(this.value)" disabled>
           <option selected>ALL</option>
         </select>
       </div>
@@ -91,9 +92,12 @@
       </div>
     </div>
 
-    <div class="row my-3">
-      <div id="loading" class="mt-5 spinner-grow mx-auto d-none" role="status">
+    <div class="row mb-3 mt-5">
+      <div id="loading" class="spinner-grow mx-auto d-none" role="status">
       </div>
+    </div>
+
+    <div class="row my-3">
       <div id="map" class="d-none" style="height: 90dvh;"></div>
     </div>
   </div>
@@ -144,12 +148,7 @@
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      const map = L.map('map').setView([13, 122], 6);
-
-      const renderBtn = document.getElementById("render-btn");
       const mapfilter = document.getElementById("mapfilter");
-      const loadingElement = document.getElementById("loading");
-      const mapElement = document.getElementById("map");
 
       loadRegionOptions();
     });

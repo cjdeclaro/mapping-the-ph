@@ -1,12 +1,26 @@
+let map;
+let geoJsonLayer;
+
 function renderMap(results) {
-  const geoJsonLayer = L.geoJSON({
+  // Initialize map only once
+  if (!map) {
+    map = L.map('map').setView([13, 122], 6);
+    setTimeout(() => map.invalidateSize(), 0);
+  }
+
+  // Remove previous layer if it exists
+  if (geoJsonLayer) {
+    map.removeLayer(geoJsonLayer);
+  }
+
+  // Add new GeoJSON layer
+  geoJsonLayer = L.geoJSON({
     type: "FeatureCollection",
     features: results
   }, {
     style: function (feature) {
       const winnerName = feature.properties._winner;
-      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : senatorialColors[
-        winnerName];
+      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : senatorialColors[winnerName];
       return {
         color: fillcolor,
         weight: 1,
@@ -21,8 +35,7 @@ function renderMap(results) {
       name = cleanString(name);
       const winnerName = feature.properties._winner;
       const winnerVotes = feature.properties._votes;
-      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : senatorialColors[
-        winnerName];
+      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : senatorialColors[winnerName];
 
       layer.on({
         mouseover: function () {
@@ -43,4 +56,8 @@ function renderMap(results) {
       });
     }
   }).addTo(map);
+
+  if (geoJsonLayer.getBounds().isValid()) {
+    map.fitBounds(geoJsonLayer.getBounds());
+  }
 }
