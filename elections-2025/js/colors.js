@@ -43,7 +43,7 @@ var senatorialColors = {
   "42. MATA, DOC MARITES (IND)": "#3949ab",
   "43. MATULA, ATTY. SONNY (WPP)": "#0097a7",
   "44. MAZA, LIZA (MKBYN)": "#43a047",
-  "45. MENDOZA, HEIDI (IND)": "#e64a19",
+  "45. MENDOZA, HEIDI (IND)": "#A020F0",
   "46. MONTEMAYOR, JOEY (IND)": "#8e24aa",
   "47. MUSTAPHA, SUBAIR (WPP)": "#795548",
   "48. OLIVAR, JOSE JESSIE (IND)": "#afb42b",

@@ -55,12 +55,8 @@ function loadRegions(results) {
 
         //CHANGE TO FILTER LOGIC
         var regionsToBeRendered = [
-          "Region I", "Region II", "Region III", "Region V", "Region VI", "Region VII", "Region VII",
-          "Region IX", "Region X", "Region XI", "Region XII", "Region XIII", "Region IV-A"
-        ]
-
-        var regionsToBeRendered = [
-          "Region I"
+          "Region I", "Region II", "Region III", "Region V", "Region VI", "Region VII", "Region VIII",
+          "Region IX", "Region X", "Region XI", "Region XII", "Region XIII", "Region IV-A", "Region IV-B", "ARMM", "CAR", "Metropolitan Manila"
         ]
 
         const regionalResult = results.filter(item => item.barangayInfo.regionname === regionname);
@@ -118,8 +114,11 @@ function loadBarangayData() {
         let cityname = citynameRaw;
         let brgyname = brgynameRaw;
 
-        const match = regionname.match(/\(([^)]+)\)/);
-        regionname = match ? match[1] : null;
+        if(regionname != "Metropolitan Manila"){
+          const match = regionname.match(/\(([^)]+)\)/);
+          regionname = match ? match[1] : null;
+        }
+
         cityname = cityname.includes("City") ? "City of " + cityname.replace(" City", "") : cityname;
         brgyname = (brgyname.endsWith("Poblacion") && brgyname !== "Poblacion") ? brgyname.replace("Poblacion",
           "Pob.") : brgyname;
@@ -131,8 +130,8 @@ function loadBarangayData() {
 
         //REMOVE THIS ONCE ALL DATA IS READY
         var regionsToBeRendered = [
-          "Region I", "Region II", "Region III", "Region V", "Region VI", "Region VII", "Region VII",
-          "Region IX", "Region X", "Region XI", "Region XII", "Region XIII", "Region IV-A"
+          "Region I", "Region II", "Region III", "Region V", "Region VI", "Region VII", "Region VIII",
+          "Region IX", "Region X", "Region XI", "Region XII", "Region XIII", "Region IV-A", "Region IV-B", "ARMM", "CAR", "Metropolitan Manila"
         ]
 
         if (filter.viewLevel === "Barangay") {
@@ -141,7 +140,7 @@ function loadBarangayData() {
               const barangayElectionResults = await getDataFromBarangay(regionname, provincename, cityname, brgyname);
               feature.properties._winner = barangayElectionResults.voteTally.senatorBrgyVotes[0].name;
               feature.properties._votes = barangayElectionResults.voteTally.senatorBrgyVotes[0].votes;
-              
+
             } catch (e) {
               console.error("Error fetching data for:", feature, e);
               feature.properties._winner = "";
@@ -151,7 +150,7 @@ function loadBarangayData() {
             feature.properties._winner = "";
             feature.properties._votes = 0;
           }
-          feature.properties._name = brgyname + ", " + cityname + ", " + provincename;
+          feature.properties._name = brgyname + ", " + citynameRaw + ", " + provincename;
           results.push(feature);
         } else {
           if (regionsToBeRendered.includes(regionname)) { //REMOVE THIS ONCE ALL DATA IS READY
