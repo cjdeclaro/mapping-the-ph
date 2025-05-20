@@ -55,7 +55,7 @@ Professor, Polytechnic University of the Philippines – Sto. Tomas
 **For the people.**
 
 **Contact Me**  
-📧 cjdeclaro16@gmail.com 
+📧 cjdeclaro16@gmail.com  
 📷 [Instagram](https://instagram.com/cjdeclaro)  
 🔗 [LinkedIn](https://linkedin.com/in/cjdeclaro)
 
