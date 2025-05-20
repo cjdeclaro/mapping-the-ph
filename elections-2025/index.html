@@ -46,14 +46,15 @@
           Mapping the Philippines 2025
         </div>
         <div>
-          Data gathered from the Comelec transparency server through the Comelec website. Data accuracy is not certain.<br>
+          Data gathered from the Comelec transparency server through the Comelec website. Data accuracy is not
+          certain.<br>
           <small>Barangay-level view may require heavy computing resources.</small>
         </div>
         <hr>
       </div>
     </div>
 
-    <div class="row my-3 d-none" id="mapfilter">
+    <div class="row my-3" id="mapfilter">
       <div class="col-6 col-sm-3 mb-3">
         <label for="filterRegion" class="form-label">Region</label>
         <select class="form-select" aria-label="Default select example" id="filterRegion">
@@ -76,15 +77,6 @@
         </select>
       </div>
       <div class="col-6 col-sm-3 mb-3">
-        <label for="filterView" class="form-label">View Level</label>
-        <select class="form-select" aria-label="Default select example" id="filterView">
-          <option selected>Barangay</option>
-          <option value="1">City/Mun</option>
-          <option value="2">Province</option>
-          <option value="3">Region</option>
-        </select>
-      </div>
-      <div class="col-6 col-sm-3 mb-3">
         <label for="filterResult" class="form-label">Result</label>
         <select class="form-select" aria-label="Default select example" id="filterResult">
           <option selected>Top 1 Senator</option>
@@ -95,7 +87,14 @@
     </div>
 
     <div class="row my-3">
-      <div id="loading" class="mt-5 spinner-grow mx-auto" role="status">
+      <div class="col-12 text-center" id="render-btn">
+        <input type="button" onclick="loadBarangayData()" value="Render Map"
+          class="btn btn-primary rounded-5 px-4 py-3">
+      </div>
+    </div>
+
+    <div class="row my-3">
+      <div id="loading" class="mt-5 spinner-grow mx-auto d-none" role="status">
       </div>
       <div id="map" class="d-none" style="height: 90dvh;"></div>
     </div>
@@ -147,12 +146,10 @@
 
   <script>
     const map = L.map('map').setView([13, 122], 6);
-
+    const renderBtn = document.getElementById("render-btn");
     const loadingElement = document.getElementById("loading");
     const mapElement = document.getElementById("map");
     const mapfilter = document.getElementById("mapfilter");
-
-    loadBarangayData();
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

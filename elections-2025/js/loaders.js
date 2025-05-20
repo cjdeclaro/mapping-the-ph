@@ -33,74 +33,18 @@ async function getDataFromBarangay(region, province, city, barangay) {
   }
 }
 
-function loadRegions(results) {
-  const mappedData = [];
-  fetch('res/' + viewLevelMapRes[filter.viewLevel])
-    .then(response => response.json())
-    .then(async geojsonData => {
-      const features = geojsonData.features;
-      const CONCURRENCY_LIMIT = 0;
-
-      // Create a queue of all features
-      let queue = [...features];
-
-      async function processFeature(feature) {
-        const regionnameRaw = feature.properties.REGION;
-        let regionname = regionnameRaw;
-
-        const match = regionname.match(/\(([^)]+)\)/);
-        regionname = match ? match[1] : null;
-
-        regionname = cleanString(regionname);
-
-        //CHANGE TO FILTER LOGIC
-        var regionsToBeRendered = [
-          "Region I", "Region II", "Region III", "Region V", "Region VI", "Region VII", "Region VIII",
-          "Region IX", "Region X", "Region XI", "Region XII", "Region XIII", "Region IV-A", "Region IV-B", "ARMM", "CAR", "Metropolitan Manila"
-        ]
-
-        const regionalResult = results.filter(item => item.barangayInfo.regionname === regionname);
-
-        if (regionsToBeRendered.includes(regionname)) { //CHANGE TO FILTER LOGIC
-          try {
-            const winner = getAllWinners(regionalResult);
-            feature.properties._winner = winner ? winner.senatorialWinner.name : "";
-            feature.properties._votes = winner ? winner.senatorialWinner.votes : "";
-
-          } catch (e) {
-            console.error("Error fetching data for:", feature, e);
-            feature.properties._winner = "";
-            feature.properties._votes = 0;
-          }
-        } else {
-          feature.properties._winner = "";
-          feature.properties._votes = 0;
-        }
-        feature.properties._name = regionname;
-
-        mappedData.push(feature);
-      }
-
-      // Process features in limited concurrency batches
-      while (queue.length > 0) {
-        const batch = queue.splice(0, CONCURRENCY_LIMIT);
-        await Promise.all(batch.map(feature => processFeature(feature)));
-      }
-
-      renderMap(mappedData);
-    })
-    .catch(err => console.error('Error loading GeoJSON:', err));
-}
-
 function loadBarangayData() {
+  renderBtn.classList.add("d-none");
+  loadingElement.classList.remove("d-none");
+
   const results = [];
+
   fetch('res/Barangays.json')
     .then(response => response.json())
     .then(async barangayData => {
       const features = barangayData.features;
       const CONCURRENCY_LIMIT = 10;
 
-      // Create a queue of all features
       let queue = [...features];
 
       async function processFeature(feature) {
@@ -114,7 +58,7 @@ function loadBarangayData() {
         let cityname = citynameRaw;
         let brgyname = brgynameRaw;
 
-        if(regionname != "Metropolitan Manila"){
+        if (regionname != "Metropolitan Manila") {
           const match = regionname.match(/\(([^)]+)\)/);
           regionname = match ? match[1] : null;
         }
@@ -134,40 +78,23 @@ function loadBarangayData() {
           "Region IX", "Region X", "Region XI", "Region XII", "Region XIII", "Region IV-A", "Region IV-B", "ARMM", "CAR", "Metropolitan Manila"
         ]
 
-        if (filter.viewLevel === "Barangay") {
-          if (regionsToBeRendered.includes(regionname)) { //REMOVE THIS ONCE ALL DATA IS READY
-            try {
-              const barangayElectionResults = await getDataFromBarangay(regionname, provincename, cityname, brgyname);
-              feature.properties._winner = barangayElectionResults.voteTally.senatorBrgyVotes[0].name;
-              feature.properties._votes = barangayElectionResults.voteTally.senatorBrgyVotes[0].votes;
+        if (regionsToBeRendered.includes(regionname)) { //REMOVE THIS ONCE ALL DATA IS READY
+          try {
+            const barangayElectionResults = await getDataFromBarangay(regionname, provincename, cityname, brgyname);
+            feature.properties._winner = barangayElectionResults.voteTally.senatorBrgyVotes[0].name;
+            feature.properties._votes = barangayElectionResults.voteTally.senatorBrgyVotes[0].votes;
 
-            } catch (e) {
-              console.error("Error fetching data for:", feature, e);
-              feature.properties._winner = "";
-              feature.properties._votes = 0;
-            }
-          } else {
+          } catch (e) {
+            console.error("Error fetching data for:", feature, e);
             feature.properties._winner = "";
             feature.properties._votes = 0;
           }
-          feature.properties._name = brgyname + ", " + citynameRaw + ", " + provincename;
-          results.push(feature);
         } else {
-          if (regionsToBeRendered.includes(regionname)) { //REMOVE THIS ONCE ALL DATA IS READY
-            try {
-              barangayElectionResults = await getDataFromBarangay(regionname, provincename, cityname, brgyname);
-              barangayElectionResults.barangayInfo = {
-                "regionname": regionname,
-                "provincename": provincename,
-                "cityname": cityname,
-                "brgyname": brgyname
-              };
-              results.push(barangayElectionResults);
-            } catch (e) {
-              console.error("Error fetching data for:", feature, e);
-            }
-          }
+          feature.properties._winner = "";
+          feature.properties._votes = 0;
         }
+        feature.properties._name = brgyname + ", " + citynameRaw + ", " + provincename;
+        results.push(feature);
       }
 
       // Process features in limited concurrency batches
@@ -176,16 +103,13 @@ function loadBarangayData() {
         await Promise.all(batch.map(feature => processFeature(feature)));
       }
 
+      renderBtn.classList.remove("d-none");
       loadingElement.classList.add("d-none");
       mapElement.classList.remove("d-none");
-      mapfilter.classList.remove("d-none");
+      // mapfilter.classList.remove("d-none");
       setTimeout(() => map.invalidateSize(), 0);
 
-      if (filter.viewLevel === "Barangay") {
-        renderMap(results);
-      } else {
-        loadRegions(results);
-      }
+      renderMap(results);
     })
     .catch(err => console.error('Error loading GeoJSON:', err));
 }
