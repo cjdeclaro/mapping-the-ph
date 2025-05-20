@@ -48,7 +48,7 @@
         <div>
           Data gathered from the Comelec transparency server through the Comelec website. Data accuracy is not
           certain.<br>
-          <small>Barangay-level view may require heavy computing resources.</small>
+          <small>Wider scope will require more computing resources.</small>
         </div>
         <hr>
       </div>
@@ -57,31 +57,29 @@
     <div class="row my-3" id="mapfilter">
       <div class="col-6 col-sm-3 mb-3">
         <label for="filterRegion" class="form-label">Region</label>
-        <select class="form-select" aria-label="Default select example" id="filterRegion">
-          <option selected>All</option>
-          <option value="1">All</option>
+        <select class="form-select" aria-label="Default select example" id="filterRegion"
+          onchange="loadProvinceOptions(this.value)">
+          <option selected>ALL</option>
         </select>
       </div>
       <div class="col-6 col-sm-3 mb-3">
         <label for="filterProvince" class="form-label">Province</label>
-        <select class="form-select" aria-label="Default select example" id="filterProvince" disabled>
-          <option selected>All</option>
-          <option value="1">All</option>
+        <select class="form-select" aria-label="Default select example" id="filterProvince" onchange="loadCityOptions(this.value)" disabled>
+          <option selected>ALL</option>
         </select>
       </div>
       <div class="col-6 col-sm-3 mb-3">
         <label for="filterCity" class="form-label">City</label>
         <select class="form-select" aria-label="Default select example" id="filterCity" disabled>
-          <option selected>All</option>
-          <option value="1">All</option>
+          <option selected>ALL</option>
         </select>
       </div>
       <div class="col-6 col-sm-3 mb-3">
         <label for="filterResult" class="form-label">Result</label>
         <select class="form-select" aria-label="Default select example" id="filterResult">
-          <option selected>Top 1 Senator</option>
-          <option value="1">Top 1 Partylist</option>
-          <option value="2">Voter Turnout</option>
+          <option selected value="Top 1 Senator">Top 1 Senator</option>
+          <option value="Top 1 Partylist">Top 1 Partylist</option>
+          <option value="Voter Turnout">Voter Turnout</option>
         </select>
       </div>
     </div>
@@ -145,11 +143,16 @@
   <script src="js/loaders.js"></script>
 
   <script>
-    const map = L.map('map').setView([13, 122], 6);
-    const renderBtn = document.getElementById("render-btn");
-    const loadingElement = document.getElementById("loading");
-    const mapElement = document.getElementById("map");
-    const mapfilter = document.getElementById("mapfilter");
+    window.addEventListener("DOMContentLoaded", () => {
+      const map = L.map('map').setView([13, 122], 6);
+
+      const renderBtn = document.getElementById("render-btn");
+      const mapfilter = document.getElementById("mapfilter");
+      const loadingElement = document.getElementById("loading");
+      const mapElement = document.getElementById("map");
+
+      loadRegionOptions();
+    });
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

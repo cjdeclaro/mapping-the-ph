@@ -72,7 +72,6 @@ function loadBarangayData() {
         cityname = cleanString(cityname);
         brgyname = cleanString(brgyname);
 
-        //REMOVE THIS ONCE ALL DATA IS READY
         var regionsToBeRendered = [
           "Region I", "Region II", "Region III", "Region V", "Region VI", "Region VII", "Region VIII",
           "Region IX", "Region X", "Region XI", "Region XII", "Region XIII", "Region IV-A", "Region IV-B", "ARMM", "CAR", "Metropolitan Manila"
