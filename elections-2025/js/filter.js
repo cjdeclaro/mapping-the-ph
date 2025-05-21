@@ -4,6 +4,32 @@ const regionFilter = document.getElementById("filterRegion");
 const provinceFilter = document.getElementById("filterProvince");
 const cityFilter = document.getElementById("filterCity");
 
+var owner = "cjdeclaro";
+var repo = "2025-election-results-web-scrape";
+
+async function getLocationNames( regionName = null, provinceName = null) {
+  const response = await fetch('data/locations.json');
+  const locations = await response.json();
+  if (!regionName) {
+    // Return array of region names
+    return locations.map(region => region.name);
+  }
+
+  const region = locations.find(r => r.name === regionName);
+  if (!region) return [];
+
+  if (!provinceName) {
+    // Return array of province names in the region
+    return region.locations.map(province => province.name);
+  }
+
+  const province = region.locations.find(p => p.name === provinceName);
+  if (!province) return [];
+
+  // Return array of city names in the province
+  return province.locations.map(city => city.name);
+}
+
 function createOption(value) {
   const option = document.createElement("option");
   option.value = value;
@@ -21,9 +47,7 @@ function populateSelect(selectElement, values, defaultValue = "ALL") {
 
 async function loadRegionOptions() {
   try {
-    const response = await fetch("data/info.json");
-    const data = await response.json();
-    const regionNames = data.regions.map(region => region.name);
+    const regionNames = await getLocationNames();
     populateSelect(regionFilter, regionNames);
   } catch (error) {
     console.error("Failed to load regions:", error);
@@ -43,9 +67,7 @@ async function loadProvinceOptions(regionname) {
   }
 
   try {
-    const response = await fetch(`data/${regionname}/info.json`);
-    const data = await response.json();
-    const provinceNames = data.regions.map(region => region.name);
+    const provinceNames = await getLocationNames(regionname);
     populateSelect(provinceFilter, provinceNames);
   } catch (error) {
     console.error("Failed to load provinces:", error);
@@ -61,9 +83,7 @@ async function loadCityOptions(provincename) {
   }
 
   try {
-    const response = await fetch(`data/${filterregionname}/${provincename}/info.json`);
-    const data = await response.json();
-    const cityNames = data.regions.map(region => region.name);
+    const cityNames = await getLocationNames(filterregionname, provincename);
     populateSelect(cityFilter, cityNames);
   } catch (error) {
     console.error("Failed to load cities:", error);

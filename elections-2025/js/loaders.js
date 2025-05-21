@@ -1,5 +1,9 @@
+var owner = "cjdeclaro";
+var repo = "2025-election-results-web-scrape";
+
 async function getDataFromBarangay(region, province, city, barangay) {
-  const basePath = `data/${region.toUpperCase()}/${province.toUpperCase()}/${city.toUpperCase()}/${barangay.toUpperCase()}`;
+  const path = `${region.toUpperCase()}/${province.toUpperCase()}/${city.toUpperCase()}/${barangay.toUpperCase()}`;
+  const basePath = `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/main/data/local/${path}`;
 
   try {
     const response = await fetch(`${basePath}/info.json`);
