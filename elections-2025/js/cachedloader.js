@@ -1,6 +1,6 @@
 const OWNER = "cjdeclaro";
 const REPO = "2025-election-results-web-scrape";
-const CONCURRENCY_LIMIT = 10;
+const CONCURRENCY_LIMIT = 50;
 
 const DB_NAME = "ElectionResultsCache";
 const STORE_NAME = "CityData";
@@ -82,6 +82,7 @@ async function getDataFromCity(region, province, city) {
     return cityData;
   } catch (err) {
     console.error(`Error fetching city data for "${city}":`, err.message);
+    await saveToCache(cacheKey, null);
     return null;
   }
 }
@@ -120,6 +121,7 @@ function loadBarangayData() {
   const regionFilter = normalizeString(document.getElementById("filterRegion").value);
   const provinceFilter = normalizeString(document.getElementById("filterProvince").value);
   const cityFilter = normalizeString(document.getElementById("filterCity").value);
+  const filterResult = document.getElementById("filterResult").value;
 
   const results = [];
   const cityDataCache = {};
@@ -177,7 +179,7 @@ function loadBarangayData() {
             const electionResults = findBarangayData(cityData, barangay);
 
             if (electionResults) {
-              const topCandidate = electionResults.voteTally.senatorBrgyVotes[0];
+              const topCandidate = electionResults.voteTally[filterResult][0];
               props._winner = topCandidate.name || "";
               props._votes = topCandidate.votes || 0;
             } else {

@@ -1,0 +1,912 @@
+{
+  "totalCocReceived": 100.0,
+  "national": [{
+    "contestCode": "00399000",
+    "contestName": "SENATOR of PHILIPPINES",
+    "statistic": {
+      "overVotes": 17098020,
+      "underVotes": 242624005,
+      "validVotes": 825278088,
+      "obtainedVotes": 428489615
+    },
+    "candidates": {
+      "candidates": [{
+        "name": "66. VILLAR, CAMILLE (NP)",
+        "votes": 13651274,
+        "percentage": 3.19
+      }, {
+        "name": "65. VERCELES, LEANDRO (IND)",
+        "votes": 310562,
+        "percentage": 0.07
+      }, {
+        "name": "64. VALBUENA, MAR MANIBELA (IND)",
+        "votes": 611432,
+        "percentage": 0.14
+      }, {
+        "name": "63. TULFO, ERWIN (LAKAS)",
+        "votes": 17118881,
+        "percentage": 4.0
+      }, {
+        "name": "62. TULFO, BEN BITAG (IND)",
+        "votes": 12090090,
+        "percentage": 2.82
+      }, {
+        "name": "61. TOLENTINO, FRANCIS TOL (PFP)",
+        "votes": 7702550,
+        "percentage": 1.8
+      }, {
+        "name": "60. TAPADO, MICHAEL BONGBONG (PM)",
+        "votes": 460662,
+        "percentage": 0.11
+      }, {
+        "name": "59. SOTTO, TITO (NPC)",
+        "votes": 14832996,
+        "percentage": 3.46
+      }, {
+        "name": "58. SALVADOR, PHILLIP IPE (PDPLBN)",
+        "votes": 10241491,
+        "percentage": 2.39
+      }, {
+        "name": "57. SAHIDULLA, NUR-ANA (IND)",
+        "votes": 476855,
+        "percentage": 0.11
+      }, {
+        "name": "56. RODRIGUEZ, ATTY. VIC (IND)",
+        "votes": 8450668,
+        "percentage": 1.97
+      }, {
+        "name": "55. REVILLAME, WILLIE WIL (IND)",
+        "votes": 8568924,
+        "percentage": 2.0
+      }, {
+        "name": "54. RAMOS, DANILO (MKBYN)",
+        "votes": 4091257,
+        "percentage": 0.95
+      }, {
+        "name": "53. QUIBOLOY, APOLLO (IND)",
+        "votes": 5719041,
+        "percentage": 1.33
+      }, {
+        "name": "52. QUERUBIN,  ARIEL PORFIRIO (NP)",
+        "votes": 3950051,
+        "percentage": 0.92
+      }, {
+        "name": "51. PANGILINAN, KIKO (LP)",
+        "votes": 15343229,
+        "percentage": 3.58
+      }, {
+        "name": "50. PACQUIAO, MANNY PACMAN (PFP)",
+        "votes": 10397133,
+        "percentage": 2.43
+      }, {
+        "name": "49. ONG, DOC WILLIE (AKSYON)",
+        "votes": 7371944,
+        "percentage": 1.72
+      }, {
+        "name": "48. OLIVAR, JOSE JESSIE (IND)",
+        "votes": 448794,
+        "percentage": 0.1
+      }, {
+        "name": "47. MUSTAPHA, SUBAIR (WPP)",
+        "votes": 414027,
+        "percentage": 0.1
+      }, {
+        "name": "46. MONTEMAYOR,  JOEY  (IND)",
+        "votes": 671818,
+        "percentage": 0.16
+      }, {
+        "name": "45. MENDOZA, HEIDI (IND)",
+        "votes": 8759732,
+        "percentage": 2.04
+      }, {
+        "name": "44. MAZA, LIZA (MKBYN)",
+        "votes": 3927784,
+        "percentage": 0.92
+      }, {
+        "name": "43. MATULA,  ATTY.  SONNY (WPP)",
+        "votes": 3865792,
+        "percentage": 0.9
+      }, {
+        "name": "42. MATA, DOC MARITES (IND)",
+        "votes": 5789181,
+        "percentage": 1.35
+      }, {
+        "name": "41. MARTINEZ, ERIC (IND)",
+        "votes": 1032201,
+        "percentage": 0.24
+      }, {
+        "name": "40. MARQUEZ, NORMAN (IND)",
+        "votes": 1150095,
+        "percentage": 0.27
+      }, {
+        "name": "39. MARCOS, IMEE R. (NP)",
+        "votes": 13339227,
+        "percentage": 3.11
+      }, {
+        "name": "38. MARCOLETA, RODANTE (IND)",
+        "votes": 15250723,
+        "percentage": 3.56
+      }, {
+        "name": "37. LIDASAN, AMIRAH (MKBYN)",
+        "votes": 564948,
+        "percentage": 0.13
+      }, {
+        "name": "36. LEE, MANOY WILBERT (AKSYON)",
+        "votes": 587098,
+        "percentage": 0.14
+      }, {
+        "name": "35. LAPID, LITO (NPC)",
+        "votes": 13394102,
+        "percentage": 3.13
+      }, {
+        "name": "34. LAMBINO,  RAUL  (PDPLBN)",
+        "votes": 8383593,
+        "percentage": 1.96
+      }, {
+        "name": "33. LACSON, PING (IND)",
+        "votes": 15106111,
+        "percentage": 3.53
+      }, {
+        "name": "32. JOSE, RELLY JR. (KBL)",
+        "votes": 458383,
+        "percentage": 0.11
+      }, {
+        "name": "31. HONASAN, GRINGO (RP)",
+        "votes": 6700772,
+        "percentage": 1.56
+      }, {
+        "name": "30. HINLO, JAYVEE (PDPLBN)",
+        "votes": 7471704,
+        "percentage": 1.74
+      }, {
+        "name": "29. GONZALES, NORBERTO (PDSP)",
+        "votes": 990091,
+        "percentage": 0.23
+      }, {
+        "name": "28. GO, BONG GO    (PDPLBN)",
+        "votes": 27121073,
+        "percentage": 6.33
+      }, {
+        "name": "27. GAMBOA, MARC LOUIE (IND)",
+        "votes": 571637,
+        "percentage": 0.13
+      }, {
+        "name": "26. FLORANDA, MODY PISTON (MKBYN)",
+        "votes": 554385,
+        "percentage": 0.13
+      }, {
+        "name": "25. ESPIRITU, LUKE (PLM)",
+        "votes": 6481413,
+        "percentage": 1.51
+      }, {
+        "name": "24. ESCOBAL, ARNEL (PM)",
+        "votes": 731453,
+        "percentage": 0.17
+      }, {
+        "name": "23. DORINGO, NANAY MIMI (MKBYN)",
+        "votes": 744506,
+        "percentage": 0.17
+      }, {
+        "name": "22. DELA ROSA, BATO (PDPLBN)",
+        "votes": 20773946,
+        "percentage": 4.85
+      }, {
+        "name": "21. DE GUZMAN, KA LEODY (PLM)",
+        "votes": 4136899,
+        "percentage": 0.97
+      }, {
+        "name": "20. DE ALBAN,ATTORNEY ANGELO (IND)",
+        "votes": 2556983,
+        "percentage": 0.6
+      }, {
+        "name": "19. D'ANGELO, DAVID (BUNYOG)",
+        "votes": 607642,
+        "percentage": 0.14
+      }, {
+        "name": "18. CAYETANO, PIA (NP)",
+        "votes": 14573430,
+        "percentage": 3.4
+      }, {
+        "name": "17. CASTRO, TEACHER FRANCE (MKBYN)",
+        "votes": 3670972,
+        "percentage": 0.86
+      }, {
+        "name": "16. CASIÑO, TEDDY (MKBYN)",
+        "votes": 4648271,
+        "percentage": 1.08
+      }, {
+        "name": "15. CAPUYAN, ALLEN (PPP)",
+        "votes": 818437,
+        "percentage": 0.19
+      }, {
+        "name": "14. CABONEGRO, ROY (DPP)",
+        "votes": 383534,
+        "percentage": 0.09
+      }, {
+        "name": "13. BROSAS, ARLENE (MKBYN)",
+        "votes": 4343773,
+        "percentage": 1.01
+      }, {
+        "name": "12. BOSITA, COLONEL (IND)",
+        "votes": 9805903,
+        "percentage": 2.29
+      }, {
+        "name": "11. BONG REVILLA,RAMON, JR.(LAKAS)",
+        "votes": 12027845,
+        "percentage": 2.81
+      }, {
+        "name": "10. BONDOC, JIMMY (PDPLBN)",
+        "votes": 10615598,
+        "percentage": 2.48
+      }, {
+        "name": "9. BINAY, ABBY (NPC)",
+        "votes": 11808645,
+        "percentage": 2.76
+      }, {
+        "name": "8. BALLON, ROBERTO (IND)",
+        "votes": 2389847,
+        "percentage": 0.56
+      }, {
+        "name": "7. ARELLANO, ERNESTO (KTPNAN)",
+        "votes": 801677,
+        "percentage": 0.19
+      }, {
+        "name": "6. ARAMBULO, RONNEL (MKBYN)",
+        "votes": 3846216,
+        "percentage": 0.9
+      }, {
+        "name": "5. AQUINO, BAM (KNP)",
+        "votes": 20971899,
+        "percentage": 4.89
+      }, {
+        "name": "4. ANDAMO, NARS ALYN (MKBYN)",
+        "votes": 829084,
+        "percentage": 0.19
+      }, {
+        "name": "3. AMAD, WILSON (IND)",
+        "votes": 618943,
+        "percentage": 0.14
+      }, {
+        "name": "2. ADONIS, JEROME (MKBYN)",
+        "votes": 779868,
+        "percentage": 0.18
+      }, {
+        "name": "1. ABALOS, BENHUR (PFP)",
+        "votes": 11580520,
+        "percentage": 2.7
+      }]
+    }
+  }, {
+    "contestCode": "01199000",
+    "contestName": "PARTY LIST of PHILIPPINES",
+    "statistic": {
+      "overVotes": 3333868,
+      "underVotes": 12066810,
+      "validVotes": 68773174,
+      "obtainedVotes": 41950292
+    },
+    "candidates": {
+      "candidates": [{
+        "name": "29 BATANG QUIAPO",
+        "votes": 153637,
+        "percentage": 0.37
+      }, {
+        "name": "28 SULONG DIGNIDAD",
+        "votes": 8120,
+        "percentage": 0.02
+      }, {
+        "name": "27 BHW",
+        "votes": 203719,
+        "percentage": 0.49
+      }, {
+        "name": "26 AKSYON DAPAT",
+        "votes": 58916,
+        "percentage": 0.14
+      }, {
+        "name": "25 ANAKALUSUGAN",
+        "votes": 154121,
+        "percentage": 0.37
+      }, {
+        "name": "24 DUMPER PTDA",
+        "votes": 279532,
+        "percentage": 0.67
+      }, {
+        "name": "23 TGP",
+        "votes": 407922,
+        "percentage": 0.97
+      }, {
+        "name": "22 1PACMAN",
+        "votes": 233096,
+        "percentage": 0.56
+      }, {
+        "name": "21 ACT TEACHERS",
+        "votes": 353631,
+        "percentage": 0.84
+      }, {
+        "name": "20 TUCP",
+        "votes": 314814,
+        "percentage": 0.75
+      }, {
+        "name": "19 AKO PADAYON",
+        "votes": 134292,
+        "percentage": 0.32
+      }, {
+        "name": "18 EPANAW SAMBAYANAN",
+        "votes": 188505,
+        "percentage": 0.45
+      }, {
+        "name": "17 UNITED SENIOR CITIZENS",
+        "votes": 533913,
+        "percentage": 1.27
+      }, {
+        "name": "16 MAAGAP",
+        "votes": 35871,
+        "percentage": 0.09
+      }, {
+        "name": "15 WIFI",
+        "votes": 141041,
+        "percentage": 0.34
+      }, {
+        "name": "14 ARTE",
+        "votes": 14169,
+        "percentage": 0.03
+      }, {
+        "name": "13 JUAN PINOY",
+        "votes": 27523,
+        "percentage": 0.07
+      }, {
+        "name": "12 PATROL",
+        "votes": 41570,
+        "percentage": 0.1
+      }, {
+        "name": "11 IPATUPAD",
+        "votes": 96735,
+        "percentage": 0.23
+      }, {
+        "name": "10 BICOL SARO",
+        "votes": 366177,
+        "percentage": 0.87
+      }, {
+        "name": "9 MURANG KURYENTE",
+        "votes": 247754,
+        "percentage": 0.59
+      }, {
+        "name": "8 P3PWD",
+        "votes": 214605,
+        "percentage": 0.51
+      }, {
+        "name": "7 PBBM",
+        "votes": 154025,
+        "percentage": 0.37
+      }, {
+        "name": "6 ML",
+        "votes": 547949,
+        "percentage": 1.31
+      }, {
+        "name": "5 DUTERTE YOUTH",
+        "votes": 2338564,
+        "percentage": 5.57
+      }, {
+        "name": "4 KABATAAN",
+        "votes": 312344,
+        "percentage": 0.74
+      }, {
+        "name": "3 FPJ PANDAY BAYANIHAN",
+        "votes": 538003,
+        "percentage": 1.28
+      }, {
+        "name": "2 PPP",
+        "votes": 575762,
+        "percentage": 1.37
+      }, {
+        "name": "1 4PS",
+        "votes": 1469571,
+        "percentage": 3.5
+      }, {
+        "name": "156 USWAG ILONGGO",
+        "votes": 777754,
+        "percentage": 1.85
+      }, {
+        "name": "155 MAHARLIKA",
+        "votes": 78700,
+        "percentage": 0.19
+      }, {
+        "name": "154 MAGSASAKA",
+        "votes": 225371,
+        "percentage": 0.54
+      }, {
+        "name": "153 ABANG LINGKOD",
+        "votes": 274735,
+        "percentage": 0.65
+      }, {
+        "name": "152 HEAL PH",
+        "votes": 67085,
+        "percentage": 0.16
+      }, {
+        "name": "151 BBM",
+        "votes": 111174,
+        "percentage": 0.27
+      }, {
+        "name": "150 PAMILYA KO",
+        "votes": 124228,
+        "percentage": 0.3
+      }, {
+        "name": "149 LAANG KAWAL",
+        "votes": 136484,
+        "percentage": 0.33
+      }, {
+        "name": "148 TUPAD",
+        "votes": 243152,
+        "percentage": 0.58
+      }, {
+        "name": "147 HUGPONG FEDERAL",
+        "votes": 19028,
+        "percentage": 0.05
+      }, {
+        "name": "146 BAGONG PILIPINAS",
+        "votes": 70595,
+        "percentage": 0.17
+      }, {
+        "name": "145 PAMILYA MUNA",
+        "votes": 108483,
+        "percentage": 0.26
+      }, {
+        "name": "144 PINUNO",
+        "votes": 181066,
+        "percentage": 0.43
+      }, {
+        "name": "143 DIWA",
+        "votes": 195829,
+        "percentage": 0.47
+      }, {
+        "name": "142 LUNAS",
+        "votes": 151494,
+        "percentage": 0.36
+      }, {
+        "name": "141 AKAY NI SOL",
+        "votes": 159748,
+        "percentage": 0.38
+      }, {
+        "name": "140 MALASAKIT@BAYANIHAN",
+        "votes": 580100,
+        "percentage": 1.38
+      }, {
+        "name": "139 GABAY",
+        "votes": 52109,
+        "percentage": 0.12
+      }, {
+        "name": "138 SWERTE",
+        "votes": 261379,
+        "percentage": 0.62
+      }, {
+        "name": "137 A TEACHER",
+        "votes": 157116,
+        "percentage": 0.37
+      }, {
+        "name": "136 LPGMA",
+        "votes": 517833,
+        "percentage": 1.23
+      }, {
+        "name": "135 CWS",
+        "votes": 477517,
+        "percentage": 1.14
+      }, {
+        "name": "134 ABP",
+        "votes": 47027,
+        "percentage": 0.11
+      }, {
+        "name": "133 KAUNLAD PINOY",
+        "votes": 30898,
+        "percentage": 0.07
+      }, {
+        "name": "132 GP (GALING SA PUSO)",
+        "votes": 381880,
+        "percentage": 0.91
+      }, {
+        "name": "131 AKO BICOL",
+        "votes": 1073119,
+        "percentage": 2.56
+      }, {
+        "name": "130 ALONA",
+        "votes": 393684,
+        "percentage": 0.94
+      }, {
+        "name": "129 RAM",
+        "votes": 26771,
+        "percentage": 0.06
+      }, {
+        "name": "128 KABABAIHAN",
+        "votes": 107848,
+        "percentage": 0.26
+      }, {
+        "name": "127 PROBINSYANO AKO",
+        "votes": 185606,
+        "percentage": 0.44
+      }, {
+        "name": "126 AKO TANOD",
+        "votes": 49553,
+        "percentage": 0.12
+      }, {
+        "name": "125 KAMALAYAN",
+        "votes": 381437,
+        "percentage": 0.91
+      }, {
+        "name": "124 AKO BISAYA",
+        "votes": 477796,
+        "percentage": 1.14
+      }, {
+        "name": "123 API PARTY",
+        "votes": 170795,
+        "percentage": 0.41
+      }, {
+        "name": "122 PINOY WORKERS",
+        "votes": 475985,
+        "percentage": 1.13
+      }, {
+        "name": "121 1MUNTI",
+        "votes": 157665,
+        "percentage": 0.38
+      }, {
+        "name": "120 KABAYAN",
+        "votes": 141847,
+        "percentage": 0.34
+      }, {
+        "name": "119 COOP-NATCCO",
+        "votes": 509913,
+        "percentage": 1.22
+      }, {
+        "name": "118 1TAHANAN",
+        "votes": 309761,
+        "percentage": 0.74
+      }, {
+        "name": "117 AGAP",
+        "votes": 469412,
+        "percentage": 1.12
+      }, {
+        "name": "116 AKO OFW",
+        "votes": 60230,
+        "percentage": 0.14
+      }, {
+        "name": "115 TUTOK TO WIN",
+        "votes": 41036,
+        "percentage": 0.1
+      }, {
+        "name": "114 KASAMBAHAY",
+        "votes": 111269,
+        "percentage": 0.27
+      }, {
+        "name": "113 UNITED FRONTLINERS",
+        "votes": 52338,
+        "percentage": 0.12
+      }, {
+        "name": "112 LINGAP",
+        "votes": 38564,
+        "percentage": 0.09
+      }, {
+        "name": "111 ASAP NA",
+        "votes": 164030,
+        "percentage": 0.39
+      }, {
+        "name": "110 ABONO",
+        "votes": 254474,
+        "percentage": 0.61
+      }, {
+        "name": "109 TURISMO",
+        "votes": 47645,
+        "percentage": 0.11
+      }, {
+        "name": "108 TODA AKSYON",
+        "votes": 183111,
+        "percentage": 0.44
+      }, {
+        "name": "107 ANGKASANGGA",
+        "votes": 115720,
+        "percentage": 0.28
+      }, {
+        "name": "106 TRABAHO",
+        "votes": 709283,
+        "percentage": 1.69
+      }, {
+        "name": "105 ABAMIN",
+        "votes": 320349,
+        "percentage": 0.76
+      }, {
+        "name": "104 SOLID NORTH PARTY",
+        "votes": 765322,
+        "percentage": 1.82
+      }, {
+        "name": "103 AA-KASOSYO PARTY",
+        "votes": 107262,
+        "percentage": 0.26
+      }, {
+        "name": "102 PEOPLE'S CHAMP",
+        "votes": 11492,
+        "percentage": 0.03
+      }, {
+        "name": "101 HEALTH WORKERS",
+        "votes": 105512,
+        "percentage": 0.25
+      }, {
+        "name": "100 H.E.L.P. PILIPINAS",
+        "votes": 157308,
+        "percentage": 0.37
+      }, {
+        "name": "99 PINOY AKO",
+        "votes": 44419,
+        "percentage": 0.11
+      }, {
+        "name": "98 BG PARTY-LIST",
+        "votes": 79915,
+        "percentage": 0.19
+      }, {
+        "name": "97 ANG TINIG NG SENIORS",
+        "votes": 66553,
+        "percentage": 0.16
+      }, {
+        "name": "96 EDUAKSYON",
+        "votes": 161517,
+        "percentage": 0.39
+      }, {
+        "name": "95 1AGILA",
+        "votes": 104868,
+        "percentage": 0.25
+      }, {
+        "name": "94 BH - BAGONG HENERASYON",
+        "votes": 319803,
+        "percentage": 0.76
+      }, {
+        "name": "93 CIBAC",
+        "votes": 593911,
+        "percentage": 1.42
+      }, {
+        "name": "92 ONE COOP",
+        "votes": 334098,
+        "percentage": 0.8
+      }, {
+        "name": "91 PBP",
+        "votes": 68085,
+        "percentage": 0.16
+      }, {
+        "name": "90 4K",
+        "votes": 521592,
+        "percentage": 1.24
+      }, {
+        "name": "89 SENIOR CITIZENS",
+        "votes": 577753,
+        "percentage": 1.38
+      }, {
+        "name": "88 AGRI",
+        "votes": 168032,
+        "percentage": 0.4
+      }, {
+        "name": "87 BUNYOG",
+        "votes": 93825,
+        "percentage": 0.22
+      }, {
+        "name": "86 BFF",
+        "votes": 45816,
+        "percentage": 0.11
+      }, {
+        "name": "85 KAMANGGAGAWA",
+        "votes": 382657,
+        "percentage": 0.91
+      }, {
+        "name": "84 BIDA KATAGUMPAY",
+        "votes": 20885,
+        "percentage": 0.05
+      }, {
+        "name": "83 OFW",
+        "votes": 246609,
+        "percentage": 0.59
+      }, {
+        "name": "82 AANGAT TAYO",
+        "votes": 140597,
+        "percentage": 0.34
+      }, {
+        "name": "81 ARANGKADA PILIPINO",
+        "votes": 75493,
+        "percentage": 0.18
+      }, {
+        "name": "80 BOSES PARTY-LIST",
+        "votes": 102588,
+        "percentage": 0.24
+      }, {
+        "name": "79 KALINGA",
+        "votes": 235186,
+        "percentage": 0.56
+      }, {
+        "name": "78 ANGAT",
+        "votes": 229707,
+        "percentage": 0.55
+      }, {
+        "name": "77 MPBL",
+        "votes": 23189,
+        "percentage": 0.06
+      }, {
+        "name": "76 DAMAYANG FILIPINO",
+        "votes": 68403,
+        "percentage": 0.16
+      }, {
+        "name": "75 KUSUG TAUSUG",
+        "votes": 365916,
+        "percentage": 0.87
+      }, {
+        "name": "74 PUSONG PINOY",
+        "votes": 266623,
+        "percentage": 0.64
+      }, {
+        "name": "73 PROMDI",
+        "votes": 23144,
+        "percentage": 0.06
+      }, {
+        "name": "72 ANG KOMADRONA",
+        "votes": 53017,
+        "percentage": 0.13
+      }, {
+        "name": "71 SOLO PARENTS",
+        "votes": 131659,
+        "percentage": 0.31
+      }, {
+        "name": "70 ASENSO PINOY",
+        "votes": 423133,
+        "percentage": 1.01
+      }, {
+        "name": "69 AKTIBONG KAAGAPAY",
+        "votes": 55829,
+        "percentage": 0.13
+      }, {
+        "name": "68 ACT-CIS",
+        "votes": 1239930,
+        "percentage": 2.96
+      }, {
+        "name": "67 VENDORS",
+        "votes": 88845,
+        "percentage": 0.21
+      }, {
+        "name": "66 BTS BAYANING TSUPER",
+        "votes": 84204,
+        "percentage": 0.2
+      }, {
+        "name": "65 SAGIP",
+        "votes": 405297,
+        "percentage": 0.97
+      }, {
+        "name": "64 TULUNGAN TAYO",
+        "votes": 106504,
+        "percentage": 0.25
+      }, {
+        "name": "63 BUHAY",
+        "votes": 99395,
+        "percentage": 0.24
+      }, {
+        "name": "62 SBP",
+        "votes": 175520,
+        "percentage": 0.42
+      }, {
+        "name": "61 BANAT",
+        "votes": 49364,
+        "percentage": 0.12
+      }, {
+        "name": "60 ANG PROBINSIYANO",
+        "votes": 250886,
+        "percentage": 0.6
+      }, {
+        "name": "59 BAYAN MUNA",
+        "votes": 162894,
+        "percentage": 0.39
+      }, {
+        "name": "57 TICTOK",
+        "votes": 51354,
+        "percentage": 0.12
+      }, {
+        "name": "56 1-RIDER PARTY-LIST",
+        "votes": 385700,
+        "percentage": 0.92
+      }, {
+        "name": "55 ILOCANO DEFENDERS",
+        "votes": 32028,
+        "percentage": 0.08
+      }, {
+        "name": "54 KAPUSO PM",
+        "votes": 293149,
+        "percentage": 0.7
+      }, {
+        "name": "53 PHILRECA",
+        "votes": 261045,
+        "percentage": 0.62
+      }, {
+        "name": "52 AGIMAT",
+        "votes": 420813,
+        "percentage": 1.0
+      }, {
+        "name": "51 AKBAYAN",
+        "votes": 2779621,
+        "percentage": 6.63
+      }, {
+        "name": "50 UGB",
+        "votes": 53633,
+        "percentage": 0.13
+      }, {
+        "name": "49 AHON MAHIRAP",
+        "votes": 157991,
+        "percentage": 0.38
+      }, {
+        "name": "48 APAT-DAPAT",
+        "votes": 245060,
+        "percentage": 0.58
+      }, {
+        "name": "47 TINGOG",
+        "votes": 1822708,
+        "percentage": 4.34
+      }, {
+        "name": "46 GABRIELA",
+        "votes": 256811,
+        "percentage": 0.61
+      }, {
+        "name": "45 SSS-GSIS PENSYONADO",
+        "votes": 290359,
+        "percentage": 0.69
+      }, {
+        "name": "44 MAGBUBUKID",
+        "votes": 310289,
+        "percentage": 0.74
+      }, {
+        "name": "43 APEC",
+        "votes": 310427,
+        "percentage": 0.74
+      }, {
+        "name": "42 MAGDALO",
+        "votes": 78984,
+        "percentage": 0.19
+      }, {
+        "name": "41 ARISE",
+        "votes": 26565,
+        "percentage": 0.06
+      }, {
+        "name": "40 BABAE AKO",
+        "votes": 157041,
+        "percentage": 0.37
+      }, {
+        "name": "39 KM NGAYON NA",
+        "votes": 324405,
+        "percentage": 0.77
+      }, {
+        "name": "38 NANAY",
+        "votes": 293430,
+        "percentage": 0.7
+      }, {
+        "name": "37 PAMANA",
+        "votes": 31526,
+        "percentage": 0.08
+      }, {
+        "name": "36 MANILA TEACHERS",
+        "votes": 301291,
+        "percentage": 0.72
+      }, {
+        "name": "35 ABANTE BISDAK",
+        "votes": 49114,
+        "percentage": 0.12
+      }, {
+        "name": "34 CLICK PARTY",
+        "votes": 25914,
+        "percentage": 0.06
+      }, {
+        "name": "33 PAMILYANG MAGSASAKA",
+        "votes": 117440,
+        "percentage": 0.28
+      }, {
+        "name": "32 AKO ILOCANO AKO",
+        "votes": 301406,
+        "percentage": 0.72
+      }, {
+        "name": "31 GILAS",
+        "votes": 96646,
+        "percentage": 0.23
+      }, {
+        "name": "30 PBA",
+        "votes": 35078,
+        "percentage": 0.08
+      }]
+    }
+  }]
+}
