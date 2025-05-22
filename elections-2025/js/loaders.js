@@ -1,34 +1,40 @@
 var owner = "cjdeclaro";
 var repo = "2025-election-results-web-scrape";
 
-async function getDataFromBarangay(region, province, city, barangay) {
-  const path = `${region.toUpperCase()}/${province.toUpperCase()}/${city.toUpperCase()}/${barangay.toUpperCase()}`;
-  const basePath = `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/main/data/local/${path}`;
-
+// New function to fetch data from the consolidated city files
+async function getDataFromCity(region, province, city) {
+  const regionPath = region.toUpperCase();
+  const provincePath = province.toUpperCase();
+  const cityPath = city.toUpperCase();
+  
+  // Path to the consolidated city JSON file
+  const url = `https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/main/data/minified_local/${regionPath}/${provincePath}/${cityPath}.json`;
+  
   try {
-    const response = await fetch(`${basePath}/info.json`);
-    if (!response.ok) throw new Error('Barangay info not found');
-
-    const brgyInfo = await response.json();
-
-    const precinctData = await Promise.all(
-      brgyInfo.regions.map(async (precinct) => {
-        const url = `${basePath}/${precinct.name}.json`;
-        try {
-          const res = await fetch(url);
-          if (!res.ok) throw new Error(`Precinct info not found for ${precinct.name}`);
-          return await res.json();
-        } catch {
-          return null;
-        }
-      })
-    );
-
-    return calculateBarangayResults(precinctData);
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`City data not found for ${city}`);
+    
+    const cityData = await response.json();
+    return cityData;
   } catch (err) {
-    console.error('Error loading barangay or precinct info:', err);
+    console.error(`Error loading city data for ${city}:`, err);
     return null;
   }
+}
+
+// Function to find barangay data within the city data
+function findBarangayData(cityData, barangayName) {
+  if (!cityData || !cityData.data) return null;
+  
+  // Find the barangay in the city data
+  const barangayEntry = cityData.data.find(brgy => 
+    brgy.barangayName.toUpperCase() === barangayName.toUpperCase()
+  );
+  
+  if (!barangayEntry) return null;
+  
+  // Calculate the combined results from all precincts in this barangay
+  return calculateBarangayResults(barangayEntry.data);
 }
 
 function loadBarangayData() {
@@ -44,6 +50,7 @@ function loadBarangayData() {
   const cityFilter = document.getElementById("filterCity").value;
 
   const results = [];
+  const cityDataCache = {}; // Cache to store fetched city data
 
   fetch('res/Barangays.json')
     .then((response) => response.json())
@@ -86,12 +93,33 @@ function loadBarangayData() {
 
         if (matchesRegion && matchesProvince && matchesCity) {
           try {
-            const electionResults = await getDataFromBarangay(region, province, city, barangay);
-            props._winner = electionResults.voteTally.senatorBrgyVotes[0].name;
-            props._votes = electionResults.voteTally.senatorBrgyVotes[0].votes;
+            // Create a cache key for this city
+            const cacheKey = `${region}|${province}|${city}`;
+            
+            // Check if we've already fetched this city's data
+            if (!cityDataCache[cacheKey]) {
+              cityDataCache[cacheKey] = await getDataFromCity(region, province, city);
+            }
+            
+            const cityData = cityDataCache[cacheKey];
+            if (cityData) {
+              // Find the specific barangay data within the city data
+              const electionResults = findBarangayData(cityData, barangay);
+              
+              if (electionResults) {
+                props._winner = electionResults.voteTally.senatorBrgyVotes[0].name;
+                props._votes = electionResults.voteTally.senatorBrgyVotes[0].votes;
+              } else {
+                props._winner = "No Data";
+                props._votes = 0;
+              }
+            } else {
+              props._winner = "City Not Found";
+              props._votes = 0;
+            }
           } catch (e) {
             console.error("Error fetching data for:", feature, e);
-            props._winner = "";
+            props._winner = "Error";
             props._votes = 0;
           }
 
