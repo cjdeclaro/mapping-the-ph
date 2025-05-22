@@ -32,7 +32,7 @@ function renderMap(results) {
       if (feature.properties.TYPE_3 == "Waterbody") {
         name = feature.properties.NAME_3 + ", " + feature.properties.PROVINCE;
       }
-      name = cleanString(name);
+
       const winnerName = feature.properties._winner;
       const winnerVotes = feature.properties._votes;
       const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : senatorialColors[winnerName];
