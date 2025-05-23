@@ -10,7 +10,7 @@ function renderBaseMap() {
         style: {
           color: '#3388ff',
           weight: 1,
-          fillOpacity: 0.3
+          fillOpacity: 0.1
         }
       }).addTo(map);
     })

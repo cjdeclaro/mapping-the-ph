@@ -52,7 +52,7 @@ You can view the project here:
 
 If you find this project useful and want to support its continued development, you can sponsor me through:
 
-- **GitHub Sponsors**: [https://github.com/sponsors/cjdeclaro](https://github.com/sponsors/cjdeclaro)
+- **Patreon**: [https://patreon.com/cjdeclaro](https://patreon.com/cjdeclaro)
 - **PayPal**: [https://paypal.me/cjdeclaro](https://paypal.me/cjdeclaro)
 - **Buy Me a Coffee**: [https://buymeacoffee.com/cjdeclaro](https://buymeacoffee.com/cjdeclaro)
 
