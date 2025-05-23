@@ -1,12 +1,30 @@
 let map;
 let geoJsonLayer;
 
+function renderBaseMap() {
+  map = L.map('map').setView([13, 122], 6);
+  fetch('res/Regions.json')
+    .then(response => response.json())
+    .then(geojsonData => {
+      L.geoJSON(geojsonData, {
+        style: {
+          color: '#3388ff',
+          weight: 1,
+          fillOpacity: 0.3
+        }
+      }).addTo(map);
+    })
+    .catch(err => console.error('Error loading GeoJSON:', err));
+}
+
 function renderMap(results, category) {
   // Initialize map only once
   if (!map) {
     map = L.map('map').setView([13, 122], 6);
     setTimeout(() => map.invalidateSize(), 0);
   }
+
+  setTimeout(() => map.invalidateSize(), 0);
 
   // Remove previous layer if it exists
   if (geoJsonLayer) {

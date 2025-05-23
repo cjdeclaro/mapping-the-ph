@@ -11,7 +11,6 @@
 
   <title>Mapping the Philippines | 2025 Elections | cjdeclaro</title>
 
-  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
   <link rel="icon" href="assets/img/icon.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -110,7 +109,7 @@
     </div>
 
     <div class="row my-3">
-      <div id="map" class="d-none" style="height: 90dvh;"></div>
+      <div id="map" style="height: 90dvh;"></div>
     </div>
   </div>
 
@@ -163,9 +162,8 @@
 
   <script>
     window.addEventListener("DOMContentLoaded", () => {
-      const mapfilter = document.getElementById("mapfilter");
-
       loadRegionOptions();
+      renderBaseMap();
     });
   </script>
 
