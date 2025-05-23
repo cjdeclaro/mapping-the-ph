@@ -59,7 +59,19 @@ function createFeatureEvents(feature, layer, category) {
   if (category == "averageVoterTurnOut") {
     tooltipText = `${name}${voterTurnOut ? `: ${voterTurnOut}%` : ''}`;
   } else {
-    tooltipText = `${name}${winnerName ? `: ${winnerName} ${winnerVotes} votes` : ''}`;
+    const magic12 = voteData?.voteTally?.[category]?.slice(0, 12);
+    tooltipText = `<strong>${name}</strong><br><br>`;
+
+    magic12.forEach((v, index) => {
+      const senatorName = v.name || "Unknown";
+      const voteCount = v.votes || 0;
+
+      if (index === 0) {
+        tooltipText += `<strong>${senatorName}: ${voteCount} votes</strong><br>`;
+      } else {
+        tooltipText += `${senatorName}: ${voteCount} votes<br>`;
+      }
+    });
   }
 
   layer.on({
