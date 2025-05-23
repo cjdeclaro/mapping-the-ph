@@ -1,5 +1,6 @@
 let map;
 let geoJsonLayer;
+let allLayers = [];
 
 /**
  * Initializes the base map and renders the region outlines.
@@ -49,10 +50,7 @@ function createFeatureEvents(feature, layer, category) {
     feature.properties._name;
 
   const voteData = feature.properties._voteData;
-  const winner = voteData?.voteTally?.[category]?.[0];
-  const winnerName = winner?.name || "";
-  const winnerVotes = winner?.votes || 0;
-  const fillColor = getFillColor(feature, category);
+  // const fillColor = getFillColor(feature, category);
   const voterTurnOut = voteData?.voteTally?.averageVoterTurnOut || 0;
 
   let tooltipText = "";
@@ -69,6 +67,8 @@ function createFeatureEvents(feature, layer, category) {
 
         if (index === 0) {
           tooltipText += `<strong>${senatorName}: ${voteCount} votes</strong><br>`;
+          layer.name = senatorName;
+          allLayers.push(layer);
         } else {
           tooltipText += `${senatorName}: ${voteCount} votes<br>`;
         }
@@ -81,16 +81,16 @@ function createFeatureEvents(feature, layer, category) {
   layer.on({
     mouseover() {
       layer.setStyle({
-        fillColor,
-        fillOpacity: 1.0
+        // fillColor,
+        // fillOpacity: 1.0
       });
       layer.bindTooltip(tooltipText)
         .openTooltip();
     },
     mouseout() {
       layer.setStyle({
-        fillColor,
-        fillOpacity: 0.7
+        // fillColor,
+        // fillOpacity: 0.7
       });
       layer.closeTooltip();
     }
@@ -131,5 +131,31 @@ function renderMap(results, category) {
   // Fit bounds if valid
   if (geoJsonLayer.getBounds().isValid()) {
     map.fitBounds(geoJsonLayer.getBounds());
+  }
+}
+
+var currentHighlight = "";
+var currentElement;
+
+function highlightByName(name, element) {
+  if(currentHighlight != ""){
+    currentElement.style.backgroundColor = "lightgrey"
+  }
+
+  allLayers.forEach(layer => {
+    layer.setStyle({ fillOpacity: 0.7});
+  });
+
+  if(currentHighlight !== name){
+    allLayers.forEach(layer => {
+      if(layer.name !== name){
+        layer.setStyle({ fillOpacity: 0});
+      }
+    });
+    currentElement = element;
+    currentHighlight = name;
+    element.style.backgroundColor = "white"
+  } else {
+    currentHighlight = "";
   }
 }

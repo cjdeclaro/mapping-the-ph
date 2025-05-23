@@ -7,6 +7,8 @@ const DB_NAME = "ElectionResultsCache";
 const STORE_NAME = "CityData";
 const DB_VERSION = 1;
 
+let brgyWinners = [];
+
 /** IndexedDB helpers */
 function openIndexedDB() {
   return new Promise((resolve, reject) => {
@@ -72,7 +74,9 @@ async function getDataFromCity(region, province, city) {
 
   const url = buildCityDataUrl(region, province, city);
   try {
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, {
+      cache: "no-store"
+    });
     if (!response.ok) throw new Error(`City data not found for ${city}`);
 
     const cityData = await response.json();
@@ -98,12 +102,42 @@ function normalizeString(str) {
   return str.trim().replace(/�/g, "ñ").toUpperCase().replace(/\s+/g, " ");
 }
 
+function countBrgyWinner(name) {
+  const existing = brgyWinners.find(entry => entry.name === name);
+
+  if (existing) {
+    existing.count += 1;
+  } else {
+    brgyWinners.push({
+      name,
+      count: 1
+    });
+  }
+}
+
+function renderLegends(filterResult) {
+  const legendsEl = document.getElementById("legends");
+  brgyWinners = brgyWinners.sort((a, b) => b.count - a.count);
+  brgyWinners.forEach(brgyWinner => {
+    legendsEl.innerHTML += `
+      <div class="card p-2 m-1 d-flex flex-row align-items-center" style="white-space: nowrap; cursor: pointer; background-color: lightgrey" onclick="highlightByName('${brgyWinner.name}', this)">
+        <div class="legendsColor" style="background-color: ${colors[filterResult][brgyWinner.name]};"></div>
+        <small class="text-body-secondary ms-1">${brgyWinner.name}</small>
+      </div>
+    `;
+  })
+}
+
 /** Main loader */
 async function loadBarangayData() {
+  brgyWinners = [];
+
   const loadingEl = document.getElementById("loading");
   const mapEl = document.getElementById("map");
   const renderBtn = document.getElementById("render-btn");
+  const legendsEl = document.getElementById("legends");
 
+  legendsEl.innerHTML = "";
   mapEl.classList.remove("d-none");
   renderBtn.classList.add("d-none");
   loadingEl.classList.remove("d-none");
@@ -125,7 +159,12 @@ async function loadBarangayData() {
 
     const processFeature = async (feature) => {
       const props = feature.properties;
-      let { REGION: region, PROVINCE: province, NAME_2: city, NAME_3: barangay } = props;
+      let {
+        REGION: region,
+        PROVINCE: province,
+        NAME_2: city,
+        NAME_3: barangay
+      } = props;
 
       // Normalize region/city names
       if (region.toUpperCase() !== "METROPOLITAN MANILA") {
@@ -169,10 +208,21 @@ async function loadBarangayData() {
         }
 
         const cityData = cityDataCache[cacheKey];
-        props._voteData = findBarangayData(cityData, barangay);
+        const voteData = findBarangayData(cityData, barangay);
+
+        if (voteData) {
+          countBrgyWinner(voteData.voteTally[filterResult][0].name);
+        }
+
+        props._voteData = voteData;
         results.push(feature);
       } catch (error) {
-        console.error("Processing error:", { region, province, city, barangay }, error);
+        console.error("Processing error:", {
+          region,
+          province,
+          city,
+          barangay
+        }, error);
         props._voteData = null;
       }
     };
@@ -194,6 +244,9 @@ async function loadBarangayData() {
   } catch (err) {
     console.error("Failed to load GeoJSON data:", err);
   } finally {
+    if (filterResult != "averageVoterTurnOut") {
+      renderLegends(filterResult);
+    }
     renderBtn.classList.remove("d-none");
     loadingEl.classList.add("d-none");
   }
