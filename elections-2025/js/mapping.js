@@ -20,7 +20,7 @@ function renderMap(results, category) {
   }, {
     style: function (feature) {
       const winnerName = feature.properties._winner;
-      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : colors[winnerName];
+      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : colors[category][winnerName];
       return {
         color: fillcolor,
         weight: 1,
@@ -35,7 +35,7 @@ function renderMap(results, category) {
 
       const winnerName = feature.properties._winner;
       const winnerVotes = feature.properties._votes;
-      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : colors[winnerName];
+      const fillcolor = feature.properties.TYPE_3 == "Waterbody" ? "#0E87CC" : colors[category][winnerName];
 
       layer.on({
         mouseover: function () {

@@ -210,7 +210,7 @@ function loadBarangayData() {
       while (queue.length > 0) {
         const batch = queue.splice(0, CONCURRENCY_LIMIT);
         await Promise.all(batch.map(processFeature));
-        renderMap(results);
+        renderMap(results, filterResult);
       }
 
       // Finish up UI changes
