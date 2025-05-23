@@ -134,6 +134,8 @@ function loadBarangayData() {
       let queue = [...features];
 
       async function processFeature(feature) {
+        mapEl.classList.remove("d-none");
+
         const props = feature.properties;
         let region = props.REGION;
         let province = props.PROVINCE;
@@ -208,14 +210,12 @@ function loadBarangayData() {
       while (queue.length > 0) {
         const batch = queue.splice(0, CONCURRENCY_LIMIT);
         await Promise.all(batch.map(processFeature));
+        renderMap(results);
       }
 
       // Finish up UI changes
       renderBtn.classList.remove("d-none");
       loadingEl.classList.add("d-none");
-      mapEl.classList.remove("d-none");
-
-      renderMap(results);
     })
     .catch((err) => {
       console.error("Failed to load GeoJSON data:", err);

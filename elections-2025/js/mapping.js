@@ -1,7 +1,7 @@
 let map;
 let geoJsonLayer;
 
-function renderMap(results) {
+function renderMap(results, category) {
   // Initialize map only once
   if (!map) {
     map = L.map('map').setView([13, 122], 6);
@@ -24,7 +24,7 @@ function renderMap(results) {
       return {
         color: fillcolor,
         weight: 1,
-        fillOpacity: 0.3
+        fillOpacity: 0.7
       };
     },
     onEachFeature: function (feature, layer) {
@@ -41,7 +41,7 @@ function renderMap(results) {
         mouseover: function () {
           layer.setStyle({
             fillColor: fillcolor,
-            fillOpacity: 0.7
+            fillOpacity: 1.0
           });
           layer.bindTooltip(name + (winnerName ? ": " + winnerName + " " + winnerVotes + " votes" : ""))
             .openTooltip();
@@ -49,7 +49,7 @@ function renderMap(results) {
         mouseout: function () {
           layer.setStyle({
             fillColor: fillcolor,
-            fillOpacity: 0.3
+            fillOpacity: 0.7
           });
           layer.closeTooltip();
         }
