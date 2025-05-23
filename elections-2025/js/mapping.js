@@ -29,8 +29,15 @@ function getFillColor(feature, category) {
   }
 
   const voteData = feature.properties._voteData;
-  const winner = voteData?.voteTally?.[category]?.[0];
-  return winner ? colors[category][winner.name] : "#ccc";
+
+  if (category == "averageVoterTurnOut") {
+    const turnout = voteData?.voteTally?.[category];
+    const rounded = Math.round(turnout / 10) * 10;
+    return turnout ? colors[category][rounded] : "#ccc";
+  } else {
+    const winner = voteData?.voteTally?.[category]?.[0];
+    return winner ? colors[category][winner.name] : "#ccc";
+  }
 }
 
 /**
@@ -42,10 +49,18 @@ function createFeatureEvents(feature, layer, category) {
     feature.properties._name;
 
   const voteData = feature.properties._voteData;
-  const winner = voteData?.voteTally?. [category]?.[0];
+  const winner = voteData?.voteTally?.[category]?.[0];
   const winnerName = winner?.name || "";
   const winnerVotes = winner?.votes || 0;
   const fillColor = getFillColor(feature, category);
+  const voterTurnOut = voteData?.voteTally?.averageVoterTurnOut || 0;
+
+  let tooltipText = "";
+  if (category == "averageVoterTurnOut") {
+    tooltipText = `${name}${voterTurnOut ? `: ${voterTurnOut}%` : ''}`;
+  } else {
+    tooltipText = `${name}${winnerName ? `: ${winnerName} ${winnerVotes} votes` : ''}`;
+  }
 
   layer.on({
     mouseover() {
@@ -53,7 +68,7 @@ function createFeatureEvents(feature, layer, category) {
         fillColor,
         fillOpacity: 1.0
       });
-      layer.bindTooltip(`${name}${winnerName ? `: ${winnerName} ${winnerVotes} votes` : ''}`)
+      layer.bindTooltip(tooltipText)
         .openTooltip();
     },
     mouseout() {

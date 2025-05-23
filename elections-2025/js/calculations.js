@@ -65,8 +65,8 @@ function calculateBarangayResults(precinctData) {
   var totalPartylistBrgyVotes = tallyVotes(nationalPatylistResults);
 
   return {
-    "averageVoterTurnOut": calculateAverageTurnout(precinctData),
     "voteTally": {
+      "averageVoterTurnOut": calculateAverageTurnout(precinctData).toFixed(2),
       "partylistBrgyVotes": totalPartylistBrgyVotes,
       "senatorBrgyVotes": totalSenatorBrgyVotes
     }
