@@ -6,9 +6,12 @@ const DB_NAME = "ElectionResultsCache";
 const STORE_NAME = "CityData";
 const DB_VERSION = 1;
 
+let dbPromise = null;
+
 /** IndexedDB helpers */
 function openIndexedDB() {
-  return new Promise((resolve, reject) => {
+  if (dbPromise) return dbPromise;
+  dbPromise = new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
@@ -19,6 +22,7 @@ function openIndexedDB() {
       }
     };
   });
+  return dbPromise;
 }
 
 function getFromCache(key) {
@@ -45,40 +49,26 @@ function saveToCache(key, data) {
   );
 }
 
-/**
- * Helper to build GitHub raw URL for a given city JSON.
- */
 function buildCityDataUrl(region, province, city) {
   const regionPath = region.toUpperCase();
   const provincePath = province.toUpperCase();
   const cityPath = city.toUpperCase();
-
   return `https://raw.githubusercontent.com/${OWNER}/${REPO}/refs/heads/main/data/minified_local/${regionPath}/${provincePath}/${cityPath}.json`;
 }
 
-/**
- * Fetch city JSON data from the GitHub repo with IndexedDB caching.
- */
 async function getDataFromCity(region, province, city) {
   const cacheKey = `${region}|${province}|${city}`;
-
-  // Try cache first
   const cachedData = await getFromCache(cacheKey);
-  if (cachedData) {
+  if (cachedData !== undefined) {
     return cachedData;
   }
 
-  // Otherwise fetch from network
   const url = buildCityDataUrl(region, province, city);
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`City data not found for ${city}`);
-
     const cityData = await response.json();
-
-    // Save to IndexedDB cache
     await saveToCache(cacheKey, cityData);
-
     return cityData;
   } catch (err) {
     console.error(`Error fetching city data for "${city}":`, err.message);
@@ -87,30 +77,43 @@ async function getDataFromCity(region, province, city) {
   }
 }
 
-/**
- * Find and summarize barangay data within city data.
- */
 function findBarangayData(cityData, barangayName) {
-  if (!cityData.data) {return null};
-
+  if (!cityData.data) return null;
   const barangayEntry = cityData.data.find(
     (brgy) => brgy.barangayName.toUpperCase() === barangayName.toUpperCase()
   );
-
   return barangayEntry ? calculateBarangayResults(barangayEntry.data) : null;
 }
 
-/**
- * Standardize input strings.
- */
 function normalizeString(str) {
   return str.trim().replace(/�/g, "ñ").toUpperCase().replace(/\s+/g, " ");
 }
 
-/**
- * Main function to load barangay data and render to map.
- */
-function loadBarangayData() {
+function normalizeAll(props) {
+  let region = props.REGION;
+  let province = props.PROVINCE;
+  let city = props.NAME_2;
+  let barangay = props.NAME_3;
+
+  if (region.toUpperCase() !== "METROPOLITAN MANILA") {
+    const match = region.match(/\(([^)]+)\)/);
+    region = match ? match[1] : region;
+  }
+
+  if (city.includes("City")) city = "City of " + city.replace(" City", "");
+  if (barangay.endsWith("Poblacion") && barangay !== "Poblacion") {
+    barangay = barangay.replace("Poblacion", "Pob.");
+  }
+
+  return {
+    region: normalizeString(region),
+    province: normalizeString(province),
+    city: normalizeString(city),
+    barangay: normalizeString(barangay)
+  };
+}
+
+async function loadBarangayData() {
   const loadingEl = document.getElementById("loading");
   const mapEl = document.getElementById("map");
   const renderBtn = document.getElementById("render-btn");
@@ -131,43 +134,30 @@ function loadBarangayData() {
     .then(async ({
       features
     }) => {
-      let queue = [...features];
+      const filteredFeatures = features.filter((f) => {
+        const {
+          region,
+          province,
+          city
+        } = normalizeAll(f.properties);
+        return (
+          (regionFilter === "ALL" || regionFilter === region) &&
+          (provinceFilter === "ALL" || provinceFilter === province) &&
+          (cityFilter === "ALL" || cityFilter === city)
+        );
+      });
+
+      let queue = [...filteredFeatures];
 
       async function processFeature(feature) {
-        mapEl.classList.remove("d-none");
-
         const props = feature.properties;
-        let region = props.REGION;
-        let province = props.PROVINCE;
-        let city = props.NAME_2;
-        let barangay = props.NAME_3;
-
-        if (region.toUpperCase() !== "METROPOLITAN MANILA") {
-          const match = region.match(/\(([^)]+)\)/);
-          region = match ? match[1] : region;
-        }
-
-        // Normalize city naming
-        if (city.includes("City")) city = "City of " + city.replace(" City", "");
-        if (barangay.endsWith("Poblacion") && barangay !== "Poblacion") {
-          barangay = barangay.replace("Poblacion", "Pob.");
-        }
-
-        // Normalize all strings for matching and path use
-        region = normalizeString(region);
-        province = normalizeString(province);
-        city = normalizeString(city);
-        barangay = normalizeString(barangay);
-
+        const {
+          region,
+          province,
+          city,
+          barangay
+        } = normalizeAll(props);
         props._name = `${barangay}, ${city}, ${province}`;
-
-        // Match filters
-        const matchesRegion = regionFilter === "ALL" || regionFilter === region;
-        const matchesProvince = provinceFilter === "ALL" || provinceFilter === province;
-        const matchesCity = cityFilter === "ALL" || cityFilter === city;
-
-        if (!(matchesRegion && matchesProvince && matchesCity)) return;
-
         const cacheKey = `${region}|${province}|${city}`;
 
         try {
@@ -176,10 +166,8 @@ function loadBarangayData() {
           }
 
           const cityData = cityDataCache[cacheKey];
-
           if (cityData) {
             const electionResults = findBarangayData(cityData, barangay);
-
             if (electionResults) {
               const topCandidate = electionResults.voteTally[filterResult][0];
               props._winner = topCandidate.name || "";
@@ -203,19 +191,27 @@ function loadBarangayData() {
           }, error);
           props._winner = "Error";
           props._votes = 0;
+          results.push(feature);
         }
       }
 
-      // Process with concurrency limit
-      while (queue.length > 0) {
+      async function processAndRenderNextBatch() {
+        if (queue.length === 0) {
+          renderBtn.classList.remove("d-none");
+          loadingEl.classList.add("d-none");
+          return;
+        }
+
         const batch = queue.splice(0, CONCURRENCY_LIMIT);
         await Promise.all(batch.map(processFeature));
-        renderMap(results, filterResult);
+        renderMap([...results], filterResult); // render progressively
+
+        // Give browser time to paint before next batch
+        setTimeout(processAndRenderNextBatch, 0);
       }
 
-      // Finish up UI changes
-      renderBtn.classList.remove("d-none");
-      loadingEl.classList.add("d-none");
+      mapEl.classList.remove("d-none");
+      processAndRenderNextBatch(); // start batch rendering
     })
     .catch((err) => {
       console.error("Failed to load GeoJSON data:", err);
