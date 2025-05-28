@@ -1,7 +1,7 @@
 // Constants
 const OWNER = "cjdeclaro";
 const REPO = "2025-election-results-web-scrape";
-const CONCURRENCY_LIMIT = 100;
+const CONCURRENCY_LIMIT = 10;
 
 const DB_NAME = "ElectionResultsCache";
 const STORE_NAME = "CityData";
@@ -105,9 +105,16 @@ function normalizeString(str) {
 function countBrgyWinner(name) {
   const existing = brgyWinners.find(entry => entry.name === name);
 
-  if (existing) {
-    existing.count += 1;
-  } else {
+  // if (existing) {
+  //   existing.count += 1;
+  // } else {
+  //   brgyWinners.push({
+  //     name,
+  //     count: 1
+  //   });
+  // }
+
+  if (!existing) {
     brgyWinners.push({
       name,
       count: 1
