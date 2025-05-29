@@ -157,7 +157,7 @@ function renderLegends(filterResult) {
   });
 }
 
-/** Main loader with optimized batching */
+/** Main loader with region-by-region processing for "ALL" */
 async function loadBarangayData() {
   brgyWinners = [];
 
@@ -177,121 +177,55 @@ async function loadBarangayData() {
   const filterResult = document.getElementById("filterResult").value;
 
   const results = [];
-  let processedCount = 0;
 
   try {
     const geoData = await fetch("res/Barangays.json").then((res) => res.json());
     
-    // Pre-filter features to reduce processing load
-    const filteredFeatures = geoData.features.filter(feature => {
-      const props = feature.properties;
-      let { REGION: region, PROVINCE: province, NAME_2: city } = props;
-
-      if (region.toUpperCase() !== "METROPOLITAN MANILA") {
-        const match = region.match(/\(([^)]+)\)/);
-        region = match ? match[1] : region;
-      }
-      if (city.includes("City")) city = "City of " + city.replace(" City", "");
-
-      region = normalizeString(region);
-      province = normalizeString(province);
-      city = normalizeString(city);
-
-      const matchesRegion = regionFilter === "ALL" || regionFilter === region;
-      const matchesProvince = provinceFilter === "ALL" || provinceFilter === province;
-      const matchesCity = cityFilter === "ALL" || cityFilter === city;
+    if (regionFilter === "ALL") {
+      // Load locations.json to get all regions
+      const locations = await fetch("data/locations.json").then((res) => res.json());
+      const regions = locations.map(loc => normalizeString(loc.name));
       
-      return matchesRegion && matchesProvince && matchesCity;
-    });
-
-    console.log(`Processing ${filteredFeatures.length} barangays...`);
-
-    // Group by city to minimize data fetching
-    const citiesMap = new Map();
-    filteredFeatures.forEach(feature => {
-      const props = feature.properties;
-      let { REGION: region, PROVINCE: province, NAME_2: city } = props;
-
-      if (region.toUpperCase() !== "METROPOLITAN MANILA") {
-        const match = region.match(/\(([^)]+)\)/);
-        region = match ? match[1] : region;
-      }
-      if (city.includes("City")) city = "City of " + city.replace(" City", "");
-
-      region = normalizeString(region);
-      province = normalizeString(province);
-      city = normalizeString(city);
-
-      const cityKey = `${region}|${province}|${city}`;
-      if (!citiesMap.has(cityKey)) {
-        citiesMap.set(cityKey, []);
-      }
-      citiesMap.get(cityKey).push(feature);
-    });
-
-    // Process cities in batches
-    const cityKeys = Array.from(citiesMap.keys());
-    const cityDataCache = await getBatchFromCache(cityKeys);
-
-    for (let i = 0; i < cityKeys.length; i += BATCH_SIZE) {
-      const batchKeys = cityKeys.slice(i, i + BATCH_SIZE);
+      console.log(`Processing ALL regions: ${regions.length} regions found`);
       
-      // Fetch missing city data
-      const fetchPromises = batchKeys.map(async (cityKey) => {
-        if (cityDataCache[cityKey]) return { cityKey, data: cityDataCache[cityKey] };
+      // Process each region separately
+      for (let regionIndex = 0; regionIndex < regions.length; regionIndex++) {
+        const currentRegion = regions[regionIndex];
+        console.log(`Processing region ${regionIndex + 1}/${regions.length}: ${currentRegion}`);
         
-        const [region, province, city] = cityKey.split('|');
-        const data = await fetchCityData(region, province, city);
-        if (data) {
-          await saveToCache(cityKey, data);
-          return { cityKey, data };
+        // Update loading indicator
+        loadingEl.innerHTML = `Loading... Region ${regionIndex + 1}/${regions.length}: ${currentRegion}`;
+        
+        const regionResults = await processRegion(
+          geoData, 
+          currentRegion, 
+          provinceFilter, 
+          cityFilter, 
+          filterResult
+        );
+        
+        results.push(...regionResults);
+        
+        // Render progress every few regions
+        if (regionIndex % 3 === 0 || regionIndex === regions.length - 1) {
+          renderMap(results, filterResult);
         }
-        return { cityKey, data: null };
-      });
-
-      const fetchResults = await Promise.all(fetchPromises);
-      
-      // Process barangays for this batch of cities
-      fetchResults.forEach(({ cityKey, data: cityData }) => {
-        if (!cityData) return;
         
-        const features = citiesMap.get(cityKey);
-        features.forEach(feature => {
-          const props = feature.properties;
-          let { NAME_3: barangay } = props;
-          
-          if (barangay.endsWith("Poblacion") && barangay !== "Poblacion") {
-            barangay = barangay.replace("Poblacion", "Pob.");
-          }
-          barangay = normalizeString(barangay);
-          
-          const [region, province, city] = cityKey.split('|');
-          props._name = `${barangay}, ${city}, ${province}`;
-
-          try {
-            const voteData = findBarangayData(cityData, barangay);
-            if (voteData) {
-              countBrgyWinner(voteData.voteTally[filterResult][0].name);
-            }
-            props._voteData = voteData;
-            results.push(feature);
-          } catch (error) {
-            console.error("Processing error:", { region, province, city, barangay }, error);
-            props._voteData = null;
-          }
-        });
-      });
-
-      processedCount += batchKeys.length;
-      console.log(`Processed ${processedCount}/${cityKeys.length} cities`);
-
-      // Render every few batches to show progress
-      if (i % (BATCH_SIZE * 2) === 0 || i + BATCH_SIZE >= cityKeys.length) {
-        renderMap(results, filterResult);
+        // Allow UI to breathe between regions
+        await new Promise(resolve => setTimeout(resolve, 50));
       }
-
-      // Allow UI to breathe
-      await new Promise(resolve => setTimeout(resolve, 10));
+      
+      loadingEl.innerHTML = "Loading...";
+    } else {
+      // Process single region
+      const regionResults = await processRegion(
+        geoData, 
+        regionFilter, 
+        provinceFilter, 
+        cityFilter, 
+        filterResult
+      );
+      results.push(...regionResults);
     }
 
     console.log(`Completed processing ${results.length} barangays`);
@@ -305,4 +239,129 @@ async function loadBarangayData() {
     renderBtn.classList.remove("d-none");
     loadingEl.classList.add("d-none");
   }
+}
+
+/** Process a single region */
+async function processRegion(geoData, targetRegion, provinceFilter, cityFilter, filterResult) {
+  // Filter features for this specific region
+  const filteredFeatures = geoData.features.filter(feature => {
+    const props = feature.properties;
+    let { REGION: region, PROVINCE: province, NAME_2: city } = props;
+
+    if (region.toUpperCase() !== "METROPOLITAN MANILA") {
+      const match = region.match(/\(([^)]+)\)/);
+      region = match ? match[1] : region;
+    }
+    if (city.includes("City")) city = "City of " + city.replace(" City", "");
+
+    region = normalizeString(region);
+    province = normalizeString(province);
+    city = normalizeString(city);
+
+    const matchesRegion = region === targetRegion;
+    const matchesProvince = provinceFilter === "ALL" || provinceFilter === province;
+    const matchesCity = cityFilter === "ALL" || cityFilter === city;
+    
+    return matchesRegion && matchesProvince && matchesCity;
+  });
+
+  console.log(`Processing ${filteredFeatures.length} barangays in region: ${targetRegion}`);
+
+  // Group by city to minimize data fetching
+  const citiesMap = new Map();
+  filteredFeatures.forEach(feature => {
+    const props = feature.properties;
+    let { REGION: region, PROVINCE: province, NAME_2: city } = props;
+
+    if (region.toUpperCase() !== "METROPOLITAN MANILA") {
+      const match = region.match(/\(([^)]+)\)/);
+      region = match ? match[1] : region;
+    }
+    if (city.includes("City")) city = "City of " + city.replace(" City", "");
+
+    region = normalizeString(region);
+    province = normalizeString(province);
+    city = normalizeString(city);
+
+    const cityKey = `${region}|${province}|${city}`;
+    if (!citiesMap.has(cityKey)) {
+      citiesMap.set(cityKey, []);
+    }
+    citiesMap.get(cityKey).push(feature);
+  });
+
+  // Process cities in batches
+  const cityKeys = Array.from(citiesMap.keys());
+  const cityDataCache = await getBatchFromCache(cityKeys);
+  const results = [];
+
+  for (let i = 0; i < cityKeys.length; i += BATCH_SIZE) {
+    const batchKeys = cityKeys.slice(i, i + BATCH_SIZE);
+    
+    // Fetch missing city data with concurrency control
+    const semaphore = new Array(CONCURRENCY_LIMIT).fill(Promise.resolve());
+    let semaphoreIndex = 0;
+    
+    const fetchPromises = batchKeys.map(async (cityKey) => {
+      // Wait for available slot
+      await semaphore[semaphoreIndex];
+      const currentIndex = semaphoreIndex;
+      semaphoreIndex = (semaphoreIndex + 1) % CONCURRENCY_LIMIT;
+      
+      try {
+        if (cityDataCache[cityKey]) {
+          return { cityKey, data: cityDataCache[cityKey] };
+        }
+        
+        const [region, province, city] = cityKey.split('|');
+        const data = await fetchCityData(region, province, city);
+        if (data) {
+          await saveToCache(cityKey, data);
+          return { cityKey, data };
+        }
+        return { cityKey, data: null };
+      } finally {
+        // Release semaphore slot
+        semaphore[currentIndex] = Promise.resolve();
+      }
+    });
+
+    const fetchResults = await Promise.all(fetchPromises);
+    
+    // Process barangays for this batch of cities
+    fetchResults.forEach(({ cityKey, data: cityData }) => {
+      if (!cityData) return;
+      
+      const features = citiesMap.get(cityKey);
+      features.forEach(feature => {
+        const props = feature.properties;
+        let { NAME_3: barangay } = props;
+        
+        if (barangay.endsWith("Poblacion") && barangay !== "Poblacion") {
+          barangay = barangay.replace("Poblacion", "Pob.");
+        }
+        barangay = normalizeString(barangay);
+        
+        const [region, province, city] = cityKey.split('|');
+        props._name = `${barangay}, ${city}, ${province}`;
+
+        try {
+          const voteData = findBarangayData(cityData, barangay);
+          if (voteData) {
+            countBrgyWinner(voteData.voteTally[filterResult][0].name);
+          }
+          props._voteData = voteData;
+          results.push(feature);
+        } catch (error) {
+          console.error("Processing error:", { region, province, city, barangay }, error);
+          props._voteData = null;
+        }
+      });
+    });
+
+    // Allow UI to breathe
+    await new Promise(resolve => setTimeout(resolve, 10));
+  }
+
+  return results;
 }
