@@ -1,20 +1,27 @@
 // Constants
 const OWNER = "cjdeclaro";
 const REPO = "2025-election-results-web-scrape";
-const CONCURRENCY_LIMIT = 10;
+const CONCURRENCY_LIMIT = 5; // Reduced for better stability
+const BATCH_SIZE = 50; // Process in smaller batches
 
 const DB_NAME = "ElectionResultsCache";
 const STORE_NAME = "CityData";
 const DB_VERSION = 1;
 
 let brgyWinners = [];
+let dbConnection = null; // Keep connection open
 
-/** IndexedDB helpers */
-function openIndexedDB() {
+/** IndexedDB helpers with connection pooling */
+async function getDBConnection() {
+  if (dbConnection) return dbConnection;
+  
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
     request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => {
+      dbConnection = request.result;
+      resolve(dbConnection);
+    };
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       if (!db.objectStoreNames.contains(STORE_NAME)) {
@@ -24,37 +31,81 @@ function openIndexedDB() {
   });
 }
 
-function getFromCache(key) {
-  return openIndexedDB().then((db) =>
-    new Promise((resolve, reject) => {
+async function getFromCache(key) {
+  try {
+    const db = await getDBConnection();
+    return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readonly");
       const store = tx.objectStore(STORE_NAME);
       const request = store.get(key);
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error);
-    })
-  ).catch(() => undefined); // Fallback if DB fails
+    });
+  } catch (error) {
+    return undefined;
+  }
 }
 
-function saveToCache(key, data) {
-  return openIndexedDB().then((db) =>
-    new Promise((resolve, reject) => {
+async function saveToCache(key, data) {
+  try {
+    const db = await getDBConnection();
+    return new Promise((resolve, reject) => {
       const tx = db.transaction(STORE_NAME, "readwrite");
       const store = tx.objectStore(STORE_NAME);
       const request = store.put(data, key);
       request.onsuccess = () => resolve(true);
       request.onerror = () => reject(request.error);
-    })
-  ).catch(() => {}); // Silent fail
+    });
+  } catch (error) {
+    // Silent fail
+    return false;
+  }
 }
 
-function clearIndexedDBCache() {
-  return openIndexedDB().then((db) => {
+async function clearIndexedDBCache() {
+  try {
+    const db = await getDBConnection();
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
     store.clear();
     console.log("IndexedDB cache cleared.");
-  });
+  } catch (error) {
+    console.error("Failed to clear cache:", error);
+  }
+}
+
+/** Batch operations for multiple keys */
+async function getBatchFromCache(keys) {
+  const results = {};
+  try {
+    const db = await getDBConnection();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, "readonly");
+      const store = tx.objectStore(STORE_NAME);
+      let completed = 0;
+      
+      keys.forEach(key => {
+        const request = store.get(key);
+        request.onsuccess = () => {
+          if (request.result !== undefined) {
+            results[key] = request.result;
+          }
+          completed++;
+          if (completed === keys.length) {
+            resolve(results);
+          }
+        };
+        request.onerror = () => {
+          completed++;
+          if (completed === keys.length) {
+            resolve(results);
+          }
+        };
+      });
+    });
+  } catch (error) {
+    return {};
+  }
 }
 
 /** Build GitHub raw URL for city data */
@@ -62,36 +113,20 @@ function buildCityDataUrl(region, province, city) {
   return `https://raw.githubusercontent.com/${OWNER}/${REPO}/refs/heads/main/data/minified_local/${region.toUpperCase()}/${province.toUpperCase()}/${city.toUpperCase()}.json`;
 }
 
-/** Fetch city data with cache fallback */
-async function getDataFromCity(region, province, city) {
-  const cacheKey = `${region}|${province}|${city}`;
-
-  // Check IndexedDB
-  const cachedData = await getFromCache(cacheKey);
-  if (cachedData !== undefined && cachedData !== null) {
-    return cachedData;
-  }
-
+/** Batch fetch city data */
+async function fetchCityData(region, province, city) {
   const url = buildCityDataUrl(region, province, city);
   try {
-    const response = await fetch(url, {
-      cache: "no-store"
-    });
-    if (!response.ok) throw new Error(`City data not found for ${city}`);
-
-    const cityData = await response.json();
-    await saveToCache(cacheKey, cityData);
-    return cityData;
-  } catch (err) {
-    if (!err.message.includes("City data not found")) {
-      console.error(`Error fetching city data for "${city}":`, err.message);
-    }
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch (error) {
     return null;
   }
 }
 
 function findBarangayData(cityData, barangayName) {
-  if (!cityData.data) return null;
+  if (!cityData || !cityData.data) return null;
   const brgy = cityData.data.find(
     (b) => b.barangayName.toUpperCase() === barangayName.toUpperCase()
   );
@@ -104,21 +139,8 @@ function normalizeString(str) {
 
 function countBrgyWinner(name) {
   const existing = brgyWinners.find(entry => entry.name === name);
-
-  // if (existing) {
-  //   existing.count += 1;
-  // } else {
-  //   brgyWinners.push({
-  //     name,
-  //     count: 1
-  //   });
-  // }
-
   if (!existing) {
-    brgyWinners.push({
-      name,
-      count: 1
-    });
+    brgyWinners.push({ name, count: 1 });
   }
 }
 
@@ -132,10 +154,10 @@ function renderLegends(filterResult) {
         <small class="text-body-secondary ms-1">${brgyWinner.name}</small>
       </div>
     `;
-  })
+  });
 }
 
-/** Main loader */
+/** Main loader with optimized batching */
 async function loadBarangayData() {
   brgyWinners = [];
 
@@ -155,103 +177,129 @@ async function loadBarangayData() {
   const filterResult = document.getElementById("filterResult").value;
 
   const results = [];
-  const cityDataCache = {};
-  const failedCityCache = new Set();
+  let processedCount = 0;
 
   try {
     const geoData = await fetch("res/Barangays.json").then((res) => res.json());
-    const queue = [...geoData.features];
-
-    let batchCount = 0;
-
-    const processFeature = async (feature) => {
+    
+    // Pre-filter features to reduce processing load
+    const filteredFeatures = geoData.features.filter(feature => {
       const props = feature.properties;
-      let {
-        REGION: region,
-        PROVINCE: province,
-        NAME_2: city,
-        NAME_3: barangay
-      } = props;
+      let { REGION: region, PROVINCE: province, NAME_2: city } = props;
 
-      // Normalize region/city names
       if (region.toUpperCase() !== "METROPOLITAN MANILA") {
         const match = region.match(/\(([^)]+)\)/);
         region = match ? match[1] : region;
       }
       if (city.includes("City")) city = "City of " + city.replace(" City", "");
-      if (barangay.endsWith("Poblacion") && barangay !== "Poblacion") {
-        barangay = barangay.replace("Poblacion", "Pob.");
-      }
 
       region = normalizeString(region);
       province = normalizeString(province);
       city = normalizeString(city);
-      barangay = normalizeString(barangay);
-
-      props._name = `${barangay}, ${city}, ${province}`;
 
       const matchesRegion = regionFilter === "ALL" || regionFilter === region;
       const matchesProvince = provinceFilter === "ALL" || provinceFilter === province;
       const matchesCity = cityFilter === "ALL" || cityFilter === city;
-      if (!(matchesRegion && matchesProvince && matchesCity)) return;
+      
+      return matchesRegion && matchesProvince && matchesCity;
+    });
 
-      const cacheKey = `${region}|${province}|${city}`;
+    console.log(`Processing ${filteredFeatures.length} barangays...`);
 
-      if (failedCityCache.has(cacheKey)) {
-        props._voteData = null;
-        return;
+    // Group by city to minimize data fetching
+    const citiesMap = new Map();
+    filteredFeatures.forEach(feature => {
+      const props = feature.properties;
+      let { REGION: region, PROVINCE: province, NAME_2: city } = props;
+
+      if (region.toUpperCase() !== "METROPOLITAN MANILA") {
+        const match = region.match(/\(([^)]+)\)/);
+        region = match ? match[1] : region;
       }
+      if (city.includes("City")) city = "City of " + city.replace(" City", "");
 
-      try {
-        if (!cityDataCache[cacheKey]) {
-          const cityData = await getDataFromCity(region, province, city);
-          if (cityData) {
-            cityDataCache[cacheKey] = cityData;
-          } else {
-            failedCityCache.add(cacheKey);
-            props._voteData = null;
-            return;
+      region = normalizeString(region);
+      province = normalizeString(province);
+      city = normalizeString(city);
+
+      const cityKey = `${region}|${province}|${city}`;
+      if (!citiesMap.has(cityKey)) {
+        citiesMap.set(cityKey, []);
+      }
+      citiesMap.get(cityKey).push(feature);
+    });
+
+    // Process cities in batches
+    const cityKeys = Array.from(citiesMap.keys());
+    const cityDataCache = await getBatchFromCache(cityKeys);
+
+    for (let i = 0; i < cityKeys.length; i += BATCH_SIZE) {
+      const batchKeys = cityKeys.slice(i, i + BATCH_SIZE);
+      
+      // Fetch missing city data
+      const fetchPromises = batchKeys.map(async (cityKey) => {
+        if (cityDataCache[cityKey]) return { cityKey, data: cityDataCache[cityKey] };
+        
+        const [region, province, city] = cityKey.split('|');
+        const data = await fetchCityData(region, province, city);
+        if (data) {
+          await saveToCache(cityKey, data);
+          return { cityKey, data };
+        }
+        return { cityKey, data: null };
+      });
+
+      const fetchResults = await Promise.all(fetchPromises);
+      
+      // Process barangays for this batch of cities
+      fetchResults.forEach(({ cityKey, data: cityData }) => {
+        if (!cityData) return;
+        
+        const features = citiesMap.get(cityKey);
+        features.forEach(feature => {
+          const props = feature.properties;
+          let { NAME_3: barangay } = props;
+          
+          if (barangay.endsWith("Poblacion") && barangay !== "Poblacion") {
+            barangay = barangay.replace("Poblacion", "Pob.");
           }
-        }
+          barangay = normalizeString(barangay);
+          
+          const [region, province, city] = cityKey.split('|');
+          props._name = `${barangay}, ${city}, ${province}`;
 
-        const cityData = cityDataCache[cacheKey];
-        const voteData = findBarangayData(cityData, barangay);
+          try {
+            const voteData = findBarangayData(cityData, barangay);
+            if (voteData) {
+              countBrgyWinner(voteData.voteTally[filterResult][0].name);
+            }
+            props._voteData = voteData;
+            results.push(feature);
+          } catch (error) {
+            console.error("Processing error:", { region, province, city, barangay }, error);
+            props._voteData = null;
+          }
+        });
+      });
 
-        if (voteData) {
-          countBrgyWinner(voteData.voteTally[filterResult][0].name);
-        }
+      processedCount += batchKeys.length;
+      console.log(`Processed ${processedCount}/${cityKeys.length} cities`);
 
-        props._voteData = voteData;
-        results.push(feature);
-      } catch (error) {
-        console.error("Processing error:", {
-          region,
-          province,
-          city,
-          barangay
-        }, error);
-        props._voteData = null;
-      }
-    };
-
-    while (queue.length > 0) {
-      const batch = queue.splice(0, CONCURRENCY_LIMIT);
-      await Promise.all(batch.map(processFeature));
-      batchCount++;
-
-      // Render every 2 batches
-      if (batchCount % 2 === 0) {
+      // Render every few batches to show progress
+      if (i % (BATCH_SIZE * 2) === 0 || i + BATCH_SIZE >= cityKeys.length) {
         renderMap(results, filterResult);
       }
+
+      // Allow UI to breathe
+      await new Promise(resolve => setTimeout(resolve, 10));
     }
 
-    // Final render
-    renderMap(results, filterResult);
+    console.log(`Completed processing ${results.length} barangays`);
 
   } catch (err) {
-    console.error("Failed to load GeoJSON data:", err);
+    console.error("Failed to load data:", err);
   } finally {
-    if (filterResult != "averageVoterTurnOut") {
+    if (filterResult !== "averageVoterTurnOut") {
       renderLegends(filterResult);
     }
     renderBtn.classList.remove("d-none");
