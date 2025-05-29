@@ -67,8 +67,8 @@ function calculateBarangayResults(precinctData) {
   return {
     "voteTally": {
       "averageVoterTurnOut": calculateAverageTurnout(precinctData).toFixed(2),
-      "partylistBrgyVotes": [totalPartylistBrgyVotes[0]],
-      "senatorBrgyVotes": [totalSenatorBrgyVotes[0]]
+      "partylistBrgyVotes": totalPartylistBrgyVotes,
+      "senatorBrgyVotes": totalSenatorBrgyVotes
     }
   };
 }
