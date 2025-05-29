@@ -96,21 +96,25 @@
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
 
-      region = urlParams.get('region');
-      province = urlParams.get('province');
-      city = urlParams.get('city');
+      region = urlParams.get('region') || "REGION IV-A";
+      province = urlParams.get('province') || "ALL";
+      city = urlParams.get('city') || "ALL";
+      result = urlParams.get('result') || "senatorBrgyVotes";
 
       let regionFilter = document.getElementById("filterRegion");
       let provinceFilter = document.getElementById("filterProvince");
       let cityFilter = document.getElementById("filterCity");
+      let filterResult = document.getElementById("filterResult");
 
       regionFilter.innerHTML += `<option value='${region}'>${region}</option>`;
       cityFilter.innerHTML += `<option value='${city}'>${city}</option>`;
       provinceFilter.innerHTML += `<option value='${province}'>${province}</option>`;
+      filterResult.innerHTML += `<option value='${result}'>${result}</option>`;
 
       regionFilter.value = region;
       provinceFilter.value = province;
       cityFilter.value = city;
+      filterResult.value = result;
 
       renderBaseMap();
       loadBarangayData();
