@@ -193,9 +193,6 @@ async function loadBarangayData() {
         const currentRegion = regions[regionIndex];
         console.log(`Processing region ${regionIndex + 1}/${regions.length}: ${currentRegion}`);
         
-        // Update loading indicator
-        loadingEl.innerHTML = `Loading... Region ${regionIndex + 1}/${regions.length}: ${currentRegion}`;
-        
         const regionResults = await processRegion(
           geoData, 
           currentRegion, 
@@ -214,8 +211,6 @@ async function loadBarangayData() {
         // Allow UI to breathe between regions
         await new Promise(resolve => setTimeout(resolve, 50));
       }
-      
-      loadingEl.innerHTML = "Loading...";
     } else {
       // Process single region
       const regionResults = await processRegion(
@@ -226,6 +221,8 @@ async function loadBarangayData() {
         filterResult
       );
       results.push(...regionResults);
+      
+      renderMap(results, filterResult);
     }
 
     console.log(`Completed processing ${results.length} barangays`);
