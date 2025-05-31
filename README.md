@@ -1,12 +1,14 @@
 # Mapping the Philippines
 
+![Facebook cover - 1 (1)](https://github.com/user-attachments/assets/25ab4c8c-bc6d-48e2-bfba-2644eda3f12a)
+
 **Mapping the Philippines** is a project that aims to visualize various aspects of the Philippines using geographic data. It is structured to support multiple sub-projects, each with a specific theme or dataset.
 
 ## 🌐 Sub-Project: Mapping the 2025 Elections
 
 The first sub-project focuses on visualizing the **2025 Philippine Elections** by mapping the winning candidates at the **barangay level** across the country.
 
-<img width="1355" alt="image" src="https://github.com/user-attachments/assets/88d1ccda-47c1-4cde-94d2-ae92f162ab4a" />
+<img width="1277" alt="Screenshot 2025-05-29 at 10 24 10 PM" src="https://github.com/user-attachments/assets/e17a1fc0-db2b-4e17-a1a6-dca2dd0bf5a0" />
 
 ### 🔧 Tech Stack
 - **[Leaflet.js](https://leafletjs.com/)** for interactive maps  
