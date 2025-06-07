@@ -33,11 +33,55 @@
 <body id="body">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-3 col-xl-2">
-        <div class="row">
-          <div class="d-flex flex-column flex-start align-items-start w-100">
-            <div class="" id="mapfilter">
-              <div class="my-3">
+      <div class="col-12">
+        <div class="row position-relative">
+
+          <div class="position-absolute w-100 top-0 z-2 ps-5 py-3">
+            <div class="d-flex flex-row justify-content-between align-items-baseline align-items-sm-center ps-3">
+              <div class="d-flex flex-row flex-start align-items-center">
+                <a href="https://cjdeclaro.github.io">
+                  <img src="../assets/img/icon.png" style="width: 50px">
+                </a>
+                <a href="../" class="nav-link ms-3">
+                  <div class="h4 mb-0">
+                    Mapping the Philippines
+                  </div>
+                  <div>2025 National Elections</div>
+                </a>
+              </div>
+              <div class="d-flex flex-row">
+                <a class="btn btn-sm m-1 btn-outline-danger rounded-5" target="_blank"
+                  href="https://github.com/sponsors/cjdeclaro">
+                  <div class="d-flex flex-row flex-start align-items-center">
+                    <i class="fa fa-heart" aria-hidden="true"></i>
+                    <div class="d-none d-md-block ms-1">GSponsor</div>
+                  </div>
+                </a>
+                <a class="btn btn-sm m-1 btn-outline-secondary rounded-5" target="_blank"
+                  href="https://buymeacoffee.com/cjdeclaro">
+                  <div class="d-flex flex-row flex-start align-items-center">
+                    <i class="fa fa-coffee" aria-hidden="true"></i>
+                    <div class="d-none d-md-block ms-1">Coffee</div>
+                  </div>
+                </a>
+                <a class="btn btn-sm m-1 btn-outline-primary rounded-5" target="_blank"
+                  href="https://www.paypal.com/paypalme/cjdeclaro">
+                  <div class="d-flex flex-row flex-start align-items-center">
+                    <i class="fa fa-paypal" aria-hidden="true"></i>
+                    <div class="d-none d-md-block ms-1">PayPal</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="d-flex flex-row justify-content-center">
+              <div id="loading" class="text-center spinner-grow d-none" role="status">
+              </div>
+            </div>
+          </div>
+
+          <div class="position-absolute top-0 z-1 col-3 col-lg-2 pt-5">
+            <div class="pt-3">
+              <div class="my-3 pt-5">
                 <label for="filterRegion" class="form-label my-0"><small>Region</small></label>
                 <select class="form-select form-select-sm" aria-label="Default select example" id="filterRegion"
                   onchange="loadProvinceOptions(this.value)">
@@ -65,63 +109,16 @@
                   <option value="averageVoterTurnOut">Voter Turnout</option>
                 </select>
               </div>
-              <div class="my-3" id="render-btn">
+              <div class="my-4" id="render-btn">
                 <input type="button" onclick="loadBarangayData()" value="Render Map"
-                  class="btn btn-sm btn-primary rounded-5 px-3 py-2">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-9 col-xl-10">
-        <div class="row position-relative">
-          <div class="position-absolute w-100 top-0 z-1 py-3 ps-5">
-            <div class="d-flex flex-row justify-content-between align-items-center ps-3">
-              <div class="d-flex flex-row flex-start align-items-center">
-                <a href="https://cjdeclaro.github.io">
-                  <img src="../assets/img/icon.png" style="width: 50px">
-                </a>
-                <a href="../" class="nav-link ms-3">
-                  <div class="h4 mb-0">
-                    Mapping the Philippines
-                  </div>
-                  <div>2025 National Elections</div>
-                </a>
-              </div>
-              <div class="d-flex flex-column flex-md-row">
-                <a class="btn btn-sm mx-1 my-1 btn-outline-danger rounded-5" target="_blank"
-                  href="https://github.com/sponsors/cjdeclaro">
-                  <div class="d-flex flex-row flex-start align-items-center">
-                    <i class="fa fa-heart" aria-hidden="true"></i>
-                    <div class="d-none d-lg-block ms-1">GSponsor</div>
-                  </div>
-                </a>
-                <a class="btn btn-sm mx-1 my-1 btn-outline-secondary rounded-5" target="_blank"
-                  href="https://buymeacoffee.com/cjdeclaro">
-                  <div class="d-flex flex-row flex-start align-items-center">
-                    <i class="fa fa-coffee" aria-hidden="true"></i>
-                    <div class="d-none d-lg-block ms-1">Coffee</div>
-                  </div>
-                </a>
-                <a class="btn btn-sm mx-1 my-1 btn-outline-primary rounded-5" target="_blank"
-                  href="https://www.paypal.com/paypalme/cjdeclaro">
-                  <div class="d-flex flex-row flex-start align-items-center">
-                    <i class="fa fa-paypal" aria-hidden="true"></i>
-                    <div class="d-none d-lg-block ms-1">PayPal</div>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="d-flex flex-row justify-content-center">
-              <div id="loading" class="text-center spinner-grow d-none" role="status">
+                  class="btn btn-sm btn-danger rounded-5 px-3 py-2">
               </div>
             </div>
           </div>
 
           <div class="position-absolute bottom-0 mx-auto z-1 py-2">
-            <div style="max-height: 30vh; overflow-y: auto;">
-              <div class="d-flex flex-row flex-wrap" id="legends">
+            <div class="" style="overflow-x: auto;">
+              <div class="d-flex flex-row" style="width: fit-content" id="legends">
               </div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-between">
@@ -133,7 +130,9 @@
               </div>
             </div>
           </div>
+
           <div id="map" style="height: 100vh;" class="z-0"></div>
+
         </div>
       </div>
     </div>
