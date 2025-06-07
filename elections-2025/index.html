@@ -9,14 +9,15 @@
   <meta name="url" property="og:url" content="cjdeclaro.github.io">
   <meta name="image" property="og:image"
     content="https://cjdeclaro.github.io/mapping-the-ph/assets/banners/banner-fb-20250531.png">
-  <meta name="description" property="og:description" content="Visualizing the 2025 Philippine Elections by mapping the winning candidates at the barangay level across the country.">
+  <meta name="description" property="og:description"
+    content="Visualizing the 2025 Philippine Elections by mapping the winning candidates at the barangay level across the country.">
 
   <title>2025 Elections | Mapping the Philippines | cjdeclaro</title>
 
   <style>
-    .legendsColor{
-      width: 30px;
-      height: 30px;
+    .legendsColor {
+      width: 20px;
+      height: 20px;
       border-radius: 20px;
     }
   </style>
@@ -30,160 +31,109 @@
 </head>
 
 <body id="body">
-  <div class="container-fluid shadow">
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <div class="d-flex flex-row flex-start align-items-center justify-content-between">
-            <div class="d-flex flex-row flex-start py-3 align-items-center">
-              <a href="https://cjdeclaro.github.io">
-                <img src="../assets/img/icon.png" style="width: 50px">
-              </a>
-              <a href="../" class="nav-link">
-                <div class="h4 mb-0 ms-3">
-                  Mapping the Philippines
-                </div>
-              </a>
-            </div>
-
-            <div class="d-flex flex-row flex-end py-3 align-items-center">
-              <a class="btn btn-sm mx-1 btn-outline-danger rounded-5" target="_blank"
-                href="https://github.com/sponsors/cjdeclaro">
-                <div class="d-flex flex-row flex-start align-items-center">
-                  <i class="fa fa-heart" aria-hidden="true"></i>
-                  <div class="d-none d-md-block ms-1">G Sponsor</div>
-                </div>
-              </a>
-              <a class="btn btn-sm mx-1 btn-outline-secondary rounded-5" target="_blank"
-                href="https://buymeacoffee.com/cjdeclaro">
-                <div class="d-flex flex-row flex-start align-items-center">
-                  <i class="fa fa-coffee" aria-hidden="true"></i>
-                  <div class="d-none d-md-block ms-1">Coffee</div>
-                </div>
-              </a>
-              <a class="btn btn-sm mx-1 btn-outline-primary rounded-5" target="_blank"
-                href="https://www.paypal.com/paypalme/cjdeclaro">
-                <div class="d-flex flex-row flex-start align-items-center">
-                  <i class="fa fa-paypal" aria-hidden="true"></i>
-                  <div class="d-none d-md-block ms-1">PayPal</div>
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container my-5">
-    <div class="row mb-2">
-      <div class="col">
-        <div class="h6">
-          <!-- <b>SPECIAL</b> -->
-        </div>
-        <div class="h1 pb-4">
-          2025 National Elections
-        </div>
-        <div>
-          Data gathered from the Comelec transparency server through the Comelec website. Data accuracy is not
-          certain.<br>
-          <small>Wider scope will require more computing resources.</small>
-        </div>
-        <hr>
-      </div>
-    </div>
-
-    <div class="row my-3" id="mapfilter">
-      <div class="col-6 col-sm-3 mb-3">
-        <label for="filterRegion" class="form-label">Region</label>
-        <select class="form-select" aria-label="Default select example" id="filterRegion"
-          onchange="loadProvinceOptions(this.value)">
-          <option selected>ALL</option>
-        </select>
-      </div>
-      <div class="col-6 col-sm-3 mb-3">
-        <label for="filterProvince" class="form-label">Province</label>
-        <select class="form-select" aria-label="Default select example" id="filterProvince"
-          onchange="loadCityOptions(this.value)" disabled>
-          <option selected>ALL</option>
-        </select>
-      </div>
-      <div class="col-6 col-sm-3 mb-3">
-        <label for="filterCity" class="form-label">City</label>
-        <select class="form-select" aria-label="Default select example" id="filterCity" disabled>
-          <option selected>ALL</option>
-        </select>
-      </div>
-      <div class="col-6 col-sm-3 mb-3">
-        <label for="filterResult" class="form-label">Result</label>
-        <select class="form-select" aria-label="Default select example" id="filterResult">
-          <option selected value="senatorBrgyVotes">Top 1 Senator</option>
-          <option value="partylistBrgyVotes">Top 1 Partylist</option>
-          <option value="averageVoterTurnOut">Voter Turnout</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row my-3">
-      <div class="col-12 text-center" id="render-btn">
-        <input type="button" onclick="loadBarangayData()" value="Render Map"
-          class="btn btn-primary rounded-5 px-4 py-3">
-      </div>
-    </div>
-
-    <div class="row mb-3 mt-5">
-      <div id="loading" class="spinner-grow mx-auto d-none" role="status">
-      </div>
-    </div>
-
-    <div class="row my-3">
-      <div id="map" style="height: 90dvh;"></div>
-    </div>
-
-    <div class="row my-3">
-      <div class="col">
-        <div class="d-flex flex-row flex-wrap" id="legends">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container py-5 text-center">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col">
-        <div class="pt-5 mb-3 border-top">
-          <a href="https://cjdeclaro.github.io">
-            <img src="../assets/img/icon.png" alt="" style="width: 50px">
-          </a>
-          <div class="my-4">
-            <small>
-              A personal project of Christopher Jay De Claro<br>
-              Professor, Polytechnic University of the Philippines Sto Tomas
-            </small>
-          </div>
-          <div class="my-4">
-            <small>
-              For the People
-            </small>
-          </div>
-          <div class="mt-4">
-            <small>
-              @cjdeclaro<br>
-              cjdeclaro16@gmail.com
-            </small>
+      <div class="col-3 col-xl-2">
+        <div class="row">
+          <div class="d-flex flex-column flex-start align-items-start w-100">
+            <div class="" id="mapfilter">
+              <div class="my-3">
+                <label for="filterRegion" class="form-label my-0"><small>Region</small></label>
+                <select class="form-select form-select-sm" aria-label="Default select example" id="filterRegion"
+                  onchange="loadProvinceOptions(this.value)">
+                  <option selected>ALL</option>
+                </select>
+              </div>
+              <div class="my-3">
+                <label for="filterProvince" class="form-labelmy-0"><small>Province</small></label>
+                <select class="form-select form-select-sm" aria-label="Default select example" id="filterProvince"
+                  onchange="loadCityOptions(this.value)" disabled>
+                  <option selected>ALL</option>
+                </select>
+              </div>
+              <div class="my-3">
+                <label for="filterCity" class="form-label my-0"><small>City/Mun</small></label>
+                <select class="form-select form-select-sm" aria-label="Default select example" id="filterCity" disabled>
+                  <option selected>ALL</option>
+                </select>
+              </div>
+              <div class="my-3">
+                <label for="filterResult" class="form-label my-0"><small>Result</small></label>
+                <select class="form-select form-select-sm" aria-label="Default select example" id="filterResult">
+                  <option selected value="senatorBrgyVotes">Top 1 Senator</option>
+                  <option value="partylistBrgyVotes">Top 1 Partylist</option>
+                  <option value="averageVoterTurnOut">Voter Turnout</option>
+                </select>
+              </div>
+              <div class="my-3" id="render-btn">
+                <input type="button" onclick="loadBarangayData()" value="Render Map"
+                  class="btn btn-sm btn-primary rounded-5 px-3 py-2">
+              </div>
+            </div>
           </div>
         </div>
-        <div class="my-4">
-          <a target="_blank" href="https://instagram.com/cjdeclaro"><i class="mx-2 fa fa-instagram"
-              style="font-size: 30px; color: #e45447"></i></a>
-          <a target="_blank" href="https://linkedin.com/in/cjdeclaro"><i class="mx-2 fa fa-linkedin"
-              style="font-size: 30px; color: #e45447"></i></a>
-          <a target="_blank" href="https://github.com/cjdeclaro"><i class="mx-2 fa fa-github"
-              style="font-size: 30px; color: #e45447"></i></a>
-        </div>
-        <div class="my-4">
-          <a target="_blank" href="https://github.com/cjdeclaro/mapping-the-ph"
-            class="btn btn-sm btn-outline-secondary"><i class="mx-2 fa fa-github"></i>Full project documentation</a>
+      </div>
+
+      <div class="col-9 col-xl-10">
+        <div class="row position-relative">
+          <div class="position-absolute w-100 top-0 z-1 py-3 ps-5">
+            <div class="d-flex flex-row justify-content-between align-items-center ps-3">
+              <div class="d-flex flex-row flex-start align-items-center">
+                <a href="https://cjdeclaro.github.io">
+                  <img src="../assets/img/icon.png" style="width: 50px">
+                </a>
+                <a href="../" class="nav-link ms-3">
+                  <div class="h4 mb-0">
+                    Mapping the Philippines
+                  </div>
+                  <div>2025 National Elections</div>
+                </a>
+              </div>
+              <div class="d-flex flex-column flex-md-row">
+                <a class="btn btn-sm mx-1 my-1 btn-outline-danger rounded-5" target="_blank"
+                  href="https://github.com/sponsors/cjdeclaro">
+                  <div class="d-flex flex-row flex-start align-items-center">
+                    <i class="fa fa-heart" aria-hidden="true"></i>
+                    <div class="d-none d-lg-block ms-1">GSponsor</div>
+                  </div>
+                </a>
+                <a class="btn btn-sm mx-1 my-1 btn-outline-secondary rounded-5" target="_blank"
+                  href="https://buymeacoffee.com/cjdeclaro">
+                  <div class="d-flex flex-row flex-start align-items-center">
+                    <i class="fa fa-coffee" aria-hidden="true"></i>
+                    <div class="d-none d-lg-block ms-1">Coffee</div>
+                  </div>
+                </a>
+                <a class="btn btn-sm mx-1 my-1 btn-outline-primary rounded-5" target="_blank"
+                  href="https://www.paypal.com/paypalme/cjdeclaro">
+                  <div class="d-flex flex-row flex-start align-items-center">
+                    <i class="fa fa-paypal" aria-hidden="true"></i>
+                    <div class="d-none d-lg-block ms-1">PayPal</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="d-flex flex-row justify-content-center">
+              <div id="loading" class="text-center spinner-grow d-none" role="status">
+              </div>
+            </div>
+          </div>
+
+          <div class="position-absolute bottom-0 mx-auto z-1 py-2">
+            <div style="max-height: 30vh; overflow-y: auto;">
+              <div class="d-flex flex-row flex-wrap" id="legends">
+              </div>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-between">
+              <div class="">
+                <small class="text-secondary">
+                  Data gathered from the Comelec transparency server through the Comelec website. Data accuracy is not
+                  certain. Wider scope will require more computing resources.
+                </small>
+              </div>
+            </div>
+          </div>
+          <div id="map" style="height: 100vh;" class="z-0"></div>
         </div>
       </div>
     </div>
