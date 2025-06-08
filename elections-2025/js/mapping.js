@@ -6,7 +6,12 @@ let allLayers = [];
  * Initializes the base map and renders the region outlines.
  */
 function renderBaseMap() {
-  map = L.map('map').setView([13, 122], 6);
+  map = L.map('map', {
+    maxZoom: 20,
+    minZoom: 6,
+    zoomControl: false
+  }).setView([13, 122], 6);
+
   fetch('res/Regions.json')
     .then(response => response.json())
     .then(geojsonData => {
@@ -138,18 +143,22 @@ var currentHighlight = "";
 var currentElement;
 
 function highlightByName(name, element) {
-  if(currentHighlight != ""){
+  if (currentHighlight != "") {
     currentElement.style.backgroundColor = "lightgrey"
   }
 
   allLayers.forEach(layer => {
-    layer.setStyle({ fillOpacity: 0.7});
+    layer.setStyle({
+      fillOpacity: 0.7
+    });
   });
 
-  if(currentHighlight !== name){
+  if (currentHighlight !== name) {
     allLayers.forEach(layer => {
-      if(layer.name !== name){
-        layer.setStyle({ fillOpacity: 0});
+      if (layer.name !== name) {
+        layer.setStyle({
+          fillOpacity: 0
+        });
       }
     });
     currentElement = element;
