@@ -149,7 +149,7 @@ function renderLegends(filterResult) {
   brgyWinners = brgyWinners.sort((a, b) => b.count - a.count);
   brgyWinners.forEach(brgyWinner => {
     legendsEl.innerHTML += `
-      <div class="card p-2 m-1 d-flex flex-row align-items-center" style="white-space: nowrap; cursor: pointer; background-color: lightgrey" onclick="highlightByName('${brgyWinner.name}', this)">
+      <div class="glass card p-2 m-1 d-flex flex-row align-items-center" style="white-space: nowrap; cursor: pointer" onclick="highlightByName('${brgyWinner.name}', this)">
         <div class="legendsColor" style="background-color: ${colors[filterResult][brgyWinner.name]};"></div>
         <small class="text-body-secondary ms-1">${brgyWinner.name}</small>
       </div>
