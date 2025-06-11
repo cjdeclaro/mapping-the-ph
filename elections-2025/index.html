@@ -20,6 +20,25 @@
       height: 20px;
       border-radius: 20px;
     }
+
+    .glass {
+      background-color: rgba(255, 255, 255, 0.5) !important;
+      backdrop-filter: blur(1px) brightness(110%) !important;
+      color: rgb(0, 0, 0) !important;
+      box-shadow: inset 0px 0px 5px 3px rgb(255, 255, 255) !important;
+      border: unset !important;
+    }
+
+    .glass:hover {
+      background-color: rgba(255, 255, 255, 0.9) !important;
+      box-shadow: inset 0px 0px 5px 10px rgb(255, 255, 255) !important;
+    }
+
+    .glass:disabled {
+      background-color: rgba(175, 175, 175, 0.5) !important;
+      color: grey !important;
+      box-shadow: unset !important;
+    }
   </style>
 
   <link rel="icon" href="../assets/img/icon.png">
@@ -83,27 +102,27 @@
             <div class="pt-3">
               <div class="my-3 pt-5">
                 <label for="filterRegion" class="form-label my-0"><small>Region</small></label>
-                <select class="rounded-2 form-select form-select-sm" id="filterRegion"
+                <select class="glass rounded-2 form-select form-select-sm" id="filterRegion"
                   onchange="loadProvinceOptions(this.value)">
                   <option selected>ALL</option>
                 </select>
               </div>
               <div class="my-3">
                 <label for="filterProvince" class="form-labelmy-0"><small>Province</small></label>
-                <select class="rounded-2 form-select form-select-sm" id="filterProvince"
+                <select class="glass rounded-2 form-select form-select-sm" id="filterProvince"
                   onchange="loadCityOptions(this.value)" disabled>
                   <option selected>ALL</option>
                 </select>
               </div>
               <div class="my-3">
                 <label for="filterCity" class="form-label my-0"><small>City/Mun</small></label>
-                <select class="rounded-2 form-select form-select-sm" id="filterCity" disabled>
+                <select class="glass rounded-2 form-select form-select-sm" id="filterCity" disabled>
                   <option selected>ALL</option>
                 </select>
               </div>
               <div class="my-3">
                 <label for="filterResult" class="form-label my-0"><small>Result</small></label>
-                <select class="rounded-2 form-select form-select-sm" id="filterResult">
+                <select class="glass rounded-2 form-select form-select-sm" id="filterResult">
                   <option selected value="senatorBrgyVotes">Top 1 Senator</option>
                   <option value="partylistBrgyVotes">Top 1 Partylist</option>
                   <option value="averageVoterTurnOut">Voter Turnout</option>
@@ -111,7 +130,7 @@
               </div>
               <div class="my-4" id="render-btn">
                 <input type="button" onclick="loadBarangayData()" value="Render Map"
-                  class="btn btn-sm btn-danger rounded-5 px-3 py-2">
+                  class="glass btn rounded-5 px-3 py-2">
               </div>
             </div>
           </div>
