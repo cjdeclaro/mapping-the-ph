@@ -123,10 +123,16 @@
               </div>
               <div class="my-3">
                 <label for="filterResult" class="form-label my-0"><small>Result</small></label>
-                <select class="glass rounded-2 form-select form-select-sm" id="filterResult">
+                <select class="glass rounded-2 form-select form-select-sm" onchange="resultChange(this.value)" id="filterResult">
                   <option selected value="senatorBrgyVotes">Top 1 Senator</option>
                   <option value="partylistBrgyVotes">Top 1 Partylist</option>
                   <option value="averageVoterTurnOut">Voter Turnout</option>
+                  <option value="perSenator">Per Senator</option>
+                </select>
+              </div>
+              <div class="my-3 d-none" id="senatorListFilterContainer">
+                <label for="senatorListFilter" class="form-label my-0"><small>Senator</small></label>
+                <select class="glass rounded-2 form-select form-select-sm" id="senatorListFilter">
                 </select>
               </div>
               <div class="my-4" id="render-btn">
@@ -178,6 +184,7 @@
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       loadRegionOptions();
+      loadSenatorOptions();
       renderBaseMap();
     });
   </script>

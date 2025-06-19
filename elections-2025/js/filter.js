@@ -3,11 +3,13 @@ var filterregionname = "ALL";
 const regionFilter = document.getElementById("filterRegion");
 const provinceFilter = document.getElementById("filterProvince");
 const cityFilter = document.getElementById("filterCity");
+const senatorListFilter = document.getElementById("senatorListFilter");
+const senatorListFilterContainer = document.getElementById("senatorListFilterContainer");
 
 var owner = "cjdeclaro";
 var repo = "2025-election-results-web-scrape";
 
-async function getLocationNames( regionName = null, provinceName = null) {
+async function getLocationNames(regionName = null, provinceName = null) {
   const response = await fetch('data/locations.json');
   const locations = await response.json();
   if (!regionName) {
@@ -39,7 +41,11 @@ function createOption(value) {
 
 function populateSelect(selectElement, values, defaultValue = "ALL") {
   selectElement.innerHTML = "";
-  selectElement.appendChild(createOption(defaultValue));
+
+  if (defaultValue) {
+    selectElement.appendChild(createOption(defaultValue));
+  }
+
   values.forEach(value => {
     selectElement.appendChild(createOption(value));
   });
@@ -51,6 +57,22 @@ async function loadRegionOptions() {
     populateSelect(regionFilter, regionNames);
   } catch (error) {
     console.error("Failed to load regions:", error);
+  }
+}
+
+async function loadSenatorOptions() {
+  const response = await fetch('data/coc.json');
+  const coc = await response.json();
+
+  const senators = coc.national[0].candidates.candidates.map(candidate => candidate.name);
+  populateSelect(senatorListFilter, senators.reverse(), null);
+}
+
+function resultChange(value) {
+  if (value == "perSenator") {
+    senatorListFilterContainer.classList.remove("d-none");
+  } else {
+    senatorListFilterContainer.classList.add("d-none");
   }
 }
 

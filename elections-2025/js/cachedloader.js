@@ -125,12 +125,12 @@ async function fetchCityData(region, province, city) {
   }
 }
 
-function findBarangayData(cityData, barangayName) {
+function findBarangayData(cityData, barangayName, filterName = null) {
   if (!cityData || !cityData.data) return null;
   const brgy = cityData.data.find(
     (b) => b.barangayName.toUpperCase() === barangayName.toUpperCase()
   );
-  return brgy ? calculateBarangayResults(brgy.data) : null;
+  return brgy ? calculateBarangayResults(brgy.data, filterName) : null;
 }
 
 function normalizeString(str) {
@@ -174,7 +174,11 @@ async function loadBarangayData() {
   const regionFilter = normalizeString(document.getElementById("filterRegion").value);
   const provinceFilter = normalizeString(document.getElementById("filterProvince").value);
   const cityFilter = normalizeString(document.getElementById("filterCity").value);
-  const filterResult = document.getElementById("filterResult").value;
+  const filterResultAdvanced = document.getElementById("filterResult").value;
+  const senatorListFilter = document.getElementById("senatorListFilter").value;
+
+  const filterName = filterResultAdvanced == "perSenator" ? senatorListFilter : null;
+  const filterResult = filterResultAdvanced == "perSenator" ? "senatorBrgyVotes" : filterResultAdvanced;
 
   const results = [];
 
@@ -198,14 +202,15 @@ async function loadBarangayData() {
           currentRegion, 
           provinceFilter, 
           cityFilter, 
-          filterResult
+          filterResult,
+          filterName
         );
         
         results.push(...regionResults);
         
         // Render progress every few regions
         if (regionIndex % 3 === 0 || regionIndex === regions.length - 1) {
-          renderMap(results, filterResult);
+          renderMap(results, filterResult, filterResultAdvanced);
         }
         
         // Allow UI to breathe between regions
@@ -218,11 +223,12 @@ async function loadBarangayData() {
         regionFilter, 
         provinceFilter, 
         cityFilter, 
-        filterResult
+        filterResult,
+        filterName
       );
       results.push(...regionResults);
       
-      renderMap(results, filterResult);
+      renderMap(results, filterResult, filterResultAdvanced);
     }
 
     console.log(`Completed processing ${results.length} barangays`);
@@ -239,7 +245,7 @@ async function loadBarangayData() {
 }
 
 /** Process a single region */
-async function processRegion(geoData, targetRegion, provinceFilter, cityFilter, filterResult) {
+async function processRegion(geoData, targetRegion, provinceFilter, cityFilter, filterResult, filterName) {
   // Filter features for this specific region
   const filteredFeatures = geoData.features.filter(feature => {
     const props = feature.properties;
@@ -343,7 +349,7 @@ async function processRegion(geoData, targetRegion, provinceFilter, cityFilter, 
         props._name = `${barangay}, ${city}, ${province}`;
 
         try {
-          const voteData = findBarangayData(cityData, barangay);
+          const voteData = findBarangayData(cityData, barangay, filterName);
           if (voteData) {
             countBrgyWinner(voteData.voteTally[filterResult][0].name);
           }

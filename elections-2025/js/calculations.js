@@ -12,7 +12,7 @@ function calculateAverageTurnout(dataArray) {
 }
 
 
-function tallyVotes(allResults) {
+function tallyVotes(allResults, totalBarangayVoters, filterName = null) {
   const tally = {};
   let totalVotes = 0;
 
@@ -37,10 +37,12 @@ function tallyVotes(allResults) {
   }
 
   // Convert tally to array and calculate percentages
-  const finalResults = Object.values(tally).map(candidate => ({
+  const finalResults = Object.values(tally)
+  .filter(candidate => !filterName || candidate.name === filterName)
+  .map(candidate => ({
     name: candidate.name,
     votes: candidate.votes,
-    percentage: ((candidate.votes / totalVotes) * 100).toFixed(2)
+    percentage: ((candidate.votes / totalBarangayVoters) * 100).toFixed(2)
   }));
 
   // Sort by votes descending
@@ -49,27 +51,31 @@ function tallyVotes(allResults) {
   return finalResults;
 }
 
-function calculateBarangayResults(precinctData) {
+function calculateBarangayResults(precinctData, filterName = null) {
   nationalSenatorResults = [];
   nationalPatylistResults = [];
 
+  totalBarangayVoters = 0;
+
   precinctData.forEach(precinct => {
     nationalSenatorResults.push(precinct.national[0].candidates.candidates);
+    totalBarangayVoters += precinct.information.numberOfActuallyVoters;
   });
 
   precinctData.forEach(precinct => {
     nationalPatylistResults.push(precinct.national[1].candidates.candidates);
   });
 
-  var totalSenatorBrgyVotes = tallyVotes(nationalSenatorResults);
-  var totalPartylistBrgyVotes = tallyVotes(nationalPatylistResults);
+  var totalSenatorBrgyVotes = tallyVotes(nationalSenatorResults, totalBarangayVoters, filterName);
+  var totalPartylistBrgyVotes = tallyVotes(nationalPatylistResults, totalBarangayVoters);
 
   return {
     "voteTally": {
       "averageVoterTurnOut": calculateAverageTurnout(precinctData).toFixed(2),
       "partylistBrgyVotes": totalPartylistBrgyVotes,
       "senatorBrgyVotes": totalSenatorBrgyVotes
-    }
+    },
+    "totalBarangayVoters": totalBarangayVoters
   };
 }
 

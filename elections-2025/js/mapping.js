@@ -29,7 +29,7 @@ function renderBaseMap() {
 /**
  * Determines the fill color for a feature based on its type and voting results.
  */
-function getFillColor(feature, category) {
+function getFillColor(feature, category, filterResultAdvanced) {
   if (feature.properties.TYPE_3 === "Waterbody") {
     return "#0E87CC";
   }
@@ -40,6 +40,13 @@ function getFillColor(feature, category) {
     const turnout = voteData?.voteTally?.[category];
     const rounded = Math.round(turnout / 10) * 10;
     return turnout ? colors[category][rounded] : "#ccc";
+  } else if (filterResultAdvanced == "perSenator") {
+    const winner = voteData?.voteTally?.['senatorBrgyVotes']?.[0];
+    const color = winner ? colors[category][winner.name] : "#ccc";
+    const percentage = winner ? winner.percentage : 0;
+    const rounded = percentage ? (Math.round(parseFloat(percentage) * 1.8)) : 0;
+    const opacity = rounded >= 100 ? 99 : rounded;
+    return color + ('0' + opacity).slice(-2);
   } else {
     const winner = voteData?.voteTally?.[category]?.[0];
     return winner ? colors[category][winner.name] : "#ccc";
@@ -55,7 +62,6 @@ function createFeatureEvents(feature, layer, category) {
     feature.properties._name;
 
   const voteData = feature.properties._voteData;
-  // const fillColor = getFillColor(feature, category);
   const voterTurnOut = voteData?.voteTally?.averageVoterTurnOut || 0;
 
   let tooltipText = "";
@@ -63,19 +69,21 @@ function createFeatureEvents(feature, layer, category) {
     tooltipText = `${name}${voterTurnOut ? `: ${voterTurnOut}%` : ''}`;
   } else {
     const magic12 = voteData?.voteTally?.[category]?.slice(0, 12);
-    tooltipText = `<strong>${name}</strong><br><br>`;
+    const votersCount = voteData?.totalBarangayVoters;
+    tooltipText = `<strong>${name}</strong> ${votersCount} Voters <br><br>`;
 
     if (magic12) {
       magic12.forEach((v, index) => {
         const senatorName = v.name || "Unknown";
         const voteCount = v.votes || 0;
+        const percentage = v.percentage || 0;
 
         if (index === 0) {
-          tooltipText += `<strong>${senatorName}: ${voteCount} votes</strong><br>`;
+          tooltipText += `<strong>${senatorName}: ${voteCount} votes (${percentage}%)</strong><br>`;
           layer.name = senatorName;
           allLayers.push(layer);
         } else {
-          tooltipText += `${senatorName}: ${voteCount} votes<br>`;
+          tooltipText += `${senatorName}: ${voteCount} votes (${percentage}%)<br>`;
         }
       });
     } else {
@@ -105,7 +113,7 @@ function createFeatureEvents(feature, layer, category) {
 /**
  * Renders the map with GeoJSON data and styles/features based on voting results.
  */
-function renderMap(results, category) {
+function renderMap(results, category, filterResultAdvanced = null) {
   // Initialize map once
   if (!map) {
     map = L.map('map').setView([13, 122], 6);
@@ -126,7 +134,7 @@ function renderMap(results, category) {
     features: results
   }, {
     style: feature => ({
-      color: getFillColor(feature, category),
+      color: getFillColor(feature, category, filterResultAdvanced),
       weight: 1,
       fillOpacity: 0.7
     }),
