@@ -38,8 +38,8 @@ function getFillColor(feature, category, filterResultAdvanced) {
 
   if (category == "averageVoterTurnOut") {
     const turnout = voteData?.voteTally?.[category];
-    const rounded = Math.round(turnout / 10) * 10;
-    return turnout ? colors[category][rounded] : "#ccc";
+    const rounded = Math.round(turnout);
+    return turnout ? "#008000" + ('0' + rounded).slice(-2) : "#ccc";
   } else if (filterResultAdvanced == "perSenator") {
     const winner = voteData?.voteTally?.['senatorBrgyVotes']?.[0];
     const color = winner ? colors[category][winner.name] : "#ccc";
@@ -70,7 +70,8 @@ function createFeatureEvents(feature, layer, category) {
   } else {
     const magic12 = voteData?.voteTally?.[category]?.slice(0, 12);
     const votersCount = voteData?.totalBarangayVoters;
-    tooltipText = `<strong>${name}</strong> ${votersCount} Voters <br><br>`;
+    const votersCountText = votersCount ? `${votersCount} Voters` : '';
+    tooltipText = `<strong>${name}</strong> ${votersCountText}<br><br>`;
 
     if (magic12) {
       magic12.forEach((v, index) => {
