@@ -46,10 +46,10 @@ function getFillColor(feature, category, filterResultAdvanced) {
     const percentage = winner ? winner.percentage : 0;
     const rounded = percentage ? (Math.round(parseFloat(percentage) * 1.8)) : 0;
     const opacity = rounded >= 100 ? 99 : rounded;
-    return color + ('0' + opacity).slice(-2);
+    return winner ? color + ('0' + opacity).slice(-2) : "#ccc";
   } else {
     const winner = voteData?.voteTally?.[category]?.[0];
-    return winner ? colors[category][winner.name] : "#ccc";
+    return winner ? colors[category][winner.name]+"90" : "#ccc";
   }
 }
 
@@ -137,7 +137,7 @@ function renderMap(results, category, filterResultAdvanced = null) {
     style: feature => ({
       color: getFillColor(feature, category, filterResultAdvanced),
       weight: 1,
-      fillOpacity: 0.7
+      fillOpacity: 1
     }),
     onEachFeature: (feature, layer) => createFeatureEvents(feature, layer, category)
   }).addTo(map);

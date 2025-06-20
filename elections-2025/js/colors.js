@@ -65,7 +65,8 @@ var colors = {
     "63. TULFO, ERWIN (LAKAS)": "#1a237e",
     "64. VALBUENA, MAR MANIBELA (IND)": "#9c27b0",
     "65. VERCELES, LEANDRO (IND)": "#ef6c00",
-    "66. VILLAR, CAMILLE (NP)": "#f28500"
+    "66. VILLAR, CAMILLE (NP)": "#f28500",
+    "": "#ccc"
   },
   "partylistBrgyVotes": {
     "29 BATANG QUIAPO": "#8B0000",
@@ -223,6 +224,6 @@ var colors = {
     "32 AKO ILOCANO AKO": "#8B008B",
     "31 GILAS": "#2E8B57",
     "30 PBA": "#FF8C00",
-    "": "#808080"
+    "": "#ccc"
   }
 }
