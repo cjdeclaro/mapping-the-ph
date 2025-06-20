@@ -34,6 +34,8 @@ function getFillColor(feature, category, filterResultAdvanced) {
     return "#0E87CC";
   }
 
+  let filterName = filterResultAdvanced == "perSenator" ? "senatorBrgyVotes" : category;
+
   const voteData = feature.properties._voteData;
 
   if (category == "averageVoterTurnOut") {
@@ -41,10 +43,10 @@ function getFillColor(feature, category, filterResultAdvanced) {
     const rounded = Math.round(turnout);
     return turnout ? "#008000" + ('0' + rounded).slice(-2) : "#ccc";
   } else {
-    const winner = voteData?.voteTally?.['senatorBrgyVotes']?.[0];
+    const winner = voteData?.voteTally?.[filterName]?.[0];
     const color = winner ? colors[category][winner.name] : "#ccc";
     const percentage = winner ? winner.percentage : 0;
-    const rounded = percentage ? (Math.round(parseFloat(percentage) * 1.9)) : 0;
+    const rounded = percentage ? (Math.round(parseFloat(percentage) * 1)) : 0;
     const opacity = rounded >= 100 ? 99 : rounded;
     return winner ? color + ('0' + opacity).slice(-2) : "#ccc";
   }
