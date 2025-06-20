@@ -41,7 +41,8 @@ function getFillColor(feature, category, filterResultAdvanced) {
   if (category == "averageVoterTurnOut") {
     const turnout = voteData?.voteTally?.[category];
     const rounded = Math.round(turnout);
-    return turnout ? "#008000" + ('0' + rounded).slice(-2) : "#ccc";
+    const opacity = rounded >= 100 ? 99 : rounded;
+    return turnout ? "#008000" + ('0' + opacity).slice(-2) : "#ccc";
   } else {
     const winner = voteData?.voteTally?.[filterName]?.[0];
     const color = winner ? colors[category][winner.name] : "#ccc";
