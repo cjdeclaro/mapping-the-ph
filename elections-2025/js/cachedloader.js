@@ -178,8 +178,11 @@ async function loadBarangayData() {
   const senatorListFilter = document.getElementById("senatorListFilter").value;
   const senatorListFilter2 = document.getElementById("senatorListFilter2").value;
 
+  // Name of the Senator choices
   const filterName = filterResultAdvanced == "perSenator" || filterResultAdvanced == "compareSenator" ? senatorListFilter : null;
   const filterName2 = filterResultAdvanced == "compareSenator" ? senatorListFilter2 : null;
+
+  // Assign senatorBrgyVotes as filter
   const filterResult = filterResultAdvanced == "perSenator" || filterResultAdvanced == "compareSenator" ? "senatorBrgyVotes" : filterResultAdvanced;
 
   const results = [];
