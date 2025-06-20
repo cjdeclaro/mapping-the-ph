@@ -12,7 +12,7 @@ function calculateAverageTurnout(dataArray) {
 }
 
 
-function tallyVotes(allResults, totalBarangayVoters, filterName = null) {
+function tallyVotes(allResults, totalBarangayVoters, filterName = null, filterName2 = null) {
   const tally = {};
   let totalVotes = 0;
 
@@ -38,7 +38,7 @@ function tallyVotes(allResults, totalBarangayVoters, filterName = null) {
 
   // Convert tally to array and calculate percentages
   const finalResults = Object.values(tally)
-  .filter(candidate => !filterName || candidate.name === filterName)
+  .filter(candidate => !filterName || (candidate.name === filterName || candidate.name === filterName2 ))
   .map(candidate => ({
     name: candidate.name,
     votes: candidate.votes,
@@ -51,7 +51,7 @@ function tallyVotes(allResults, totalBarangayVoters, filterName = null) {
   return finalResults;
 }
 
-function calculateBarangayResults(precinctData, filterName = null) {
+function calculateBarangayResults(precinctData, filterName = null, filterName2 = null) {
   nationalSenatorResults = [];
   nationalPatylistResults = [];
 
@@ -66,7 +66,7 @@ function calculateBarangayResults(precinctData, filterName = null) {
     nationalPatylistResults.push(precinct.national[1].candidates.candidates);
   });
 
-  var totalSenatorBrgyVotes = tallyVotes(nationalSenatorResults, totalBarangayVoters, filterName);
+  var totalSenatorBrgyVotes = tallyVotes(nationalSenatorResults, totalBarangayVoters, filterName, filterName2);
   var totalPartylistBrgyVotes = tallyVotes(nationalPatylistResults, totalBarangayVoters);
 
   return {

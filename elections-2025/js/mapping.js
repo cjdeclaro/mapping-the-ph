@@ -34,7 +34,7 @@ function getFillColor(feature, category, filterResultAdvanced) {
     return "#0E87CC";
   }
 
-  let filterName = filterResultAdvanced == "perSenator" ? "senatorBrgyVotes" : category;
+  let filterName = filterResultAdvanced == "perSenator" || filterResultAdvanced == "compareSenator" ? "senatorBrgyVotes" : category;
 
   const voteData = feature.properties._voteData;
 

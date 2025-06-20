@@ -4,7 +4,9 @@ const regionFilter = document.getElementById("filterRegion");
 const provinceFilter = document.getElementById("filterProvince");
 const cityFilter = document.getElementById("filterCity");
 const senatorListFilter = document.getElementById("senatorListFilter");
+const senatorListFilter2 = document.getElementById("senatorListFilter2");
 const senatorListFilterContainer = document.getElementById("senatorListFilterContainer");
+const senatorListFilterContainer2 = document.getElementById("senatorListFilterContainer2");
 
 var owner = "cjdeclaro";
 var repo = "2025-election-results-web-scrape";
@@ -65,14 +67,21 @@ async function loadSenatorOptions() {
   const coc = await response.json();
 
   const senators = coc.national[0].candidates.candidates.map(candidate => candidate.name);
-  populateSelect(senatorListFilter, senators.reverse(), null);
+  senators.reverse()
+
+  populateSelect(senatorListFilter, senators, null);
+  populateSelect(senatorListFilter2, senators, null);
 }
 
 function resultChange(value) {
+  senatorListFilterContainer.classList.add("d-none");
+  senatorListFilterContainer2.classList.add("d-none");
+
   if (value == "perSenator") {
     senatorListFilterContainer.classList.remove("d-none");
-  } else {
-    senatorListFilterContainer.classList.add("d-none");
+  } else if (value == "compareSenator") {
+    senatorListFilterContainer.classList.remove("d-none");
+    senatorListFilterContainer2.classList.remove("d-none");
   }
 }
 
