@@ -40,16 +40,13 @@ function getFillColor(feature, category, filterResultAdvanced) {
     const turnout = voteData?.voteTally?.[category];
     const rounded = Math.round(turnout);
     return turnout ? "#008000" + ('0' + rounded).slice(-2) : "#ccc";
-  } else if (filterResultAdvanced == "perSenator") {
+  } else {
     const winner = voteData?.voteTally?.['senatorBrgyVotes']?.[0];
     const color = winner ? colors[category][winner.name] : "#ccc";
     const percentage = winner ? winner.percentage : 0;
-    const rounded = percentage ? (Math.round(parseFloat(percentage) * 1.8)) : 0;
+    const rounded = percentage ? (Math.round(parseFloat(percentage) * 1.9)) : 0;
     const opacity = rounded >= 100 ? 99 : rounded;
     return winner ? color + ('0' + opacity).slice(-2) : "#ccc";
-  } else {
-    const winner = voteData?.voteTally?.[category]?.[0];
-    return winner ? colors[category][winner.name]+"90" : "#ccc";
   }
 }
 
