@@ -74,19 +74,38 @@ function createFeatureEvents(feature, layer, category) {
     tooltipText = `<strong>${name}</strong> ${votersCountText}<br><br>`;
 
     if (magic12) {
+      let totalVotes = 0;
+      const colorBars = [];
+
       magic12.forEach((v, index) => {
         const senatorName = v.name || "Unknown";
         const voteCount = v.votes || 0;
         const percentage = v.percentage || 0;
+        const color = colors[category][senatorName];
+        totalVotes += voteCount;
 
         if (index === 0) {
-          tooltipText += `<strong>${senatorName}: ${voteCount} votes (${percentage}%)</strong><br>`;
+          tooltipText += `<strong style="color: ${color}">${senatorName}: ${voteCount} votes (${percentage}%)</strong><br>`;
           layer.name = senatorName;
           allLayers.push(layer);
         } else {
-          tooltipText += `${senatorName}: ${voteCount} votes (${percentage}%)<br>`;
+          tooltipText += `<span style="color: ${color}">${senatorName}: ${voteCount} votes (${percentage}%)</span><br>`;
         }
+
+        colorBars.push({
+          "color": color,
+          "votes": voteCount
+        });
       });
+
+      tooltipText += `<br><div class="d-flex flex-row">`
+
+      colorBars.forEach(v => {
+        const width = Math.round((v.votes/totalVotes)*100);
+        tooltipText += `<div style='width: ${width}%; height: 10px; background-color: ${v.color}'></div>`
+      });
+
+      tooltipText += `</div>`
     } else {
       tooltipText += `No data available`;
     }
