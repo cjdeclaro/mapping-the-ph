@@ -99,7 +99,7 @@
             </div>
           </div>
 
-          <div class="position-absolute top-0 z-1 col-3 col-lg-2 py-5 overflow-scroll" style="max-height: 100vh;">
+          <div class="position-absolute top-0 z-1 col-4 col-sm-3 col-lg-2 py-5 overflow-scroll" style="max-height: 100vh;">
             <div class="py-3">
               <div class="my-3 pt-5">
                 <label for="filterRegion" class="form-label my-0"><small>Region</small></label>
@@ -123,7 +123,8 @@
               </div>
               <div class="my-3">
                 <label for="filterResult" class="form-label my-0"><small>Result</small></label>
-                <select class="glass rounded-2 form-select form-select-sm" onchange="resultChange(this.value)" id="filterResult">
+                <select class="glass rounded-2 form-select form-select-sm" onchange="resultChange(this.value)"
+                  id="filterResult">
                   <option selected value="senatorBrgyVotes">Top 1 Senator</option>
                   <option value="partylistBrgyVotes">Top 1 Partylist</option>
                   <option value="averageVoterTurnOut">Voter Turnout</option>
@@ -142,33 +143,40 @@
                 </select>
               </div>
               <div class="my-4" id="render-btn">
-                <input type="button" onclick="loadBarangayData()" value="Render Map"
-                  class="glass btn rounded-5 px-3 py-2">
+                <button type="button" onclick="loadBarangayData()" class="glass btn rounded-5 px-3 py-2">
+                  Render<span class="d-none d-sm-inline"> Map</span>
+                </button>
               </div>
             </div>
           </div>
 
-          <div class="position-absolute bottom-0 mx-auto z-1 py-2">
-            <div class="" style="overflow-x: auto;">
-              <div class="d-flex flex-row" style="width: fit-content" id="legends">
-              </div>
-            </div>
-            <div class="d-flex flex-row align-items-end justify-content-between">
-              <div class="">
-                <small class="text-secondary">
-                  Data gathered from the Comelec transparency server through the Comelec website. Data accuracy is not
-                  certain. Wider scope will require more computing resources.
-                </small>
-              </div>
-              <div class="ms-3">
-                <a target="_blank" href="https://github.com/cjdeclaro/mapping-the-ph" class="btn btn-sm btn-secondary">
-                  <div class="d-flex flex-row flex-start align-items-center">
-                    <i class="fa fa-github"></i>
-                    <div class="ms-1">
-                      <small>Documentation</small>
-                    </div>
+          <div class="position-absolute bottom-0 w-100 z-1 py-2">
+            <div class="d-flex flex-row justify-content-end">
+              <div class="col-8 col-sm-9 col-lg-10">
+                <div class="" style="overflow-x: auto;">
+                  <div class="d-flex flex-row" style="width: fit-content" id="legends">
                   </div>
-                </a>
+                </div>
+                <div class="d-flex flex-row align-items-end justify-content-between">
+                  <div class="">
+                    <small class="text-secondary d-none d-lg-block">
+                      Data gathered from the Comelec transparency server through the Comelec website. Data accuracy is
+                      not
+                      certain. Wider scope will require more computing resources.
+                    </small>
+                  </div>
+                  <div class="ms-3">
+                    <a target="_blank" href="https://github.com/cjdeclaro/mapping-the-ph"
+                      class="btn btn-sm btn-secondary">
+                      <div class="d-flex flex-row flex-start align-items-center">
+                        <i class="fa fa-github"></i>
+                        <div class="ms-1">
+                          <small>Documentation</small>
+                        </div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
