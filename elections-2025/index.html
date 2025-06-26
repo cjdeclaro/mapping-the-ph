@@ -142,6 +142,10 @@
                 <select class="glass rounded-2 form-select form-select-sm" id="senatorListFilter2">
                 </select>
               </div>
+              <div class="my-3" id="resultCountFilterContainer">
+                <label for="senatorListFilter" class="form-label my-0"><small>Result Count</small></label>
+                <input type="number" min="1" max="12" value="12" class="form-control" id="resultCountFilter" onchange="checkResultCountFilter()">
+              </div>
               <div class="my-4" id="render-btn">
                 <button type="button" onclick="loadBarangayData()" class="glass btn rounded-5 px-3 py-2">
                   Render<span class="d-none d-sm-inline"> Map</span>

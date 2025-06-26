@@ -3,8 +3,11 @@ var filterregionname = "ALL";
 const regionFilter = document.getElementById("filterRegion");
 const provinceFilter = document.getElementById("filterProvince");
 const cityFilter = document.getElementById("filterCity");
+const resultCountFilter = document.getElementById("resultCountFilter");
 const senatorListFilter = document.getElementById("senatorListFilter");
 const senatorListFilter2 = document.getElementById("senatorListFilter2");
+
+const resultCountFilterContainer = document.getElementById("resultCountFilterContainer");
 const senatorListFilterContainer = document.getElementById("senatorListFilterContainer");
 const senatorListFilterContainer2 = document.getElementById("senatorListFilterContainer2");
 
@@ -76,12 +79,25 @@ async function loadSenatorOptions() {
 function resultChange(value) {
   senatorListFilterContainer.classList.add("d-none");
   senatorListFilterContainer2.classList.add("d-none");
+  resultCountFilterContainer.classList.add("d-none");
+
+  if (value == "senatorBrgyVotes" || value == "partylistBrgyVotes"){
+    resultCountFilterContainer.classList.remove("d-none");
+  } else {
+    resultCountFilter.value = 12;
+  }
 
   if (value == "perSenator") {
     senatorListFilterContainer.classList.remove("d-none");
   } else if (value == "compareSenator") {
     senatorListFilterContainer.classList.remove("d-none");
     senatorListFilterContainer2.classList.remove("d-none");
+  }
+}
+
+function checkResultCountFilter(){
+  if (!(resultCountFilter.value > 0 && resultCountFilter.value <= 12)){
+    resultCountFilter.value = 1;
   }
 }
 

@@ -56,7 +56,7 @@ function getFillColor(feature, category, filterResultAdvanced) {
 /**
  * Creates and returns the event handlers for a given layer and feature.
  */
-function createFeatureEvents(feature, layer, category) {
+function createFeatureEvents(feature, layer, category, tooltipcount = 12) {
   const name = feature.properties.TYPE_3 === "Waterbody" ?
     `${feature.properties.NAME_3}, ${feature.properties.PROVINCE}` :
     feature.properties._name;
@@ -68,7 +68,7 @@ function createFeatureEvents(feature, layer, category) {
   if (category == "averageVoterTurnOut") {
     tooltipText = `${name}${voterTurnOut ? `: ${voterTurnOut}%` : ''}`;
   } else {
-    const magic12 = voteData?.voteTally?.[category]?.slice(0, 12);
+    const magic12 = voteData?.voteTally?.[category]?.slice(0, tooltipcount);
     const votersCount = voteData?.totalBarangayVoters;
     const votersCountText = votersCount ? `${votersCount} Voters` : '';
     tooltipText = `<strong>${name}</strong> ${votersCountText}<br><br>`;
@@ -133,7 +133,7 @@ function createFeatureEvents(feature, layer, category) {
 /**
  * Renders the map with GeoJSON data and styles/features based on voting results.
  */
-function renderMap(results, category, filterResultAdvanced = null) {
+function renderMap(results, category, filterResultAdvanced = null, tooltipcount = 12) {
   // Initialize map once
   if (!map) {
     map = L.map('map').setView([13, 122], 6);
@@ -158,7 +158,7 @@ function renderMap(results, category, filterResultAdvanced = null) {
       weight: 1,
       fillOpacity: 1
     }),
-    onEachFeature: (feature, layer) => createFeatureEvents(feature, layer, category)
+    onEachFeature: (feature, layer) => createFeatureEvents(feature, layer, category, tooltipcount)
   }).addTo(map);
 
   // Fit bounds if valid

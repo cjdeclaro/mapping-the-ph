@@ -177,6 +177,7 @@ async function loadBarangayData() {
   const filterResultAdvanced = document.getElementById("filterResult").value;
   const senatorListFilter = document.getElementById("senatorListFilter").value;
   const senatorListFilter2 = document.getElementById("senatorListFilter2").value;
+  const resultCountFilter = document.getElementById("resultCountFilter").value;
 
   // Name of the Senator choices
   const filterName = filterResultAdvanced == "perSenator" || filterResultAdvanced == "compareSenator" ? senatorListFilter : null;
@@ -216,7 +217,7 @@ async function loadBarangayData() {
         
         // Render progress every few regions
         if (regionIndex % 3 === 0 || regionIndex === regions.length - 1) {
-          renderMap(results, filterResult, filterResultAdvanced);
+          renderMap(results, filterResult, filterResultAdvanced, resultCountFilter);
         }
         
         // Allow UI to breathe between regions
@@ -235,7 +236,7 @@ async function loadBarangayData() {
       );
       results.push(...regionResults);
       
-      renderMap(results, filterResult, filterResultAdvanced);
+      renderMap(results, filterResult, filterResultAdvanced, resultCountFilter);
     }
 
     console.log(`Completed processing ${results.length} barangays`);
