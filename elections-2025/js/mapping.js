@@ -17,9 +17,10 @@ function renderBaseMap() {
     .then(geojsonData => {
       L.geoJSON(geojsonData, {
         style: {
-          color: '#3388ff',
+          color: 'white',
           weight: 1,
-          fillOpacity: 0.1
+          fillColor: 'transparent',
+          fillOpacity: 0
         }
       }).addTo(map);
     })
