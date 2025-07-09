@@ -8,7 +8,7 @@
 
 The first sub-project focuses on visualizing the **2025 Philippine Elections** by mapping the winning candidates at the **barangay level** across the country.
 
-<img width="1680" alt="Screenshot 2025-06-08 at 11 31 35 AM" src="https://github.com/user-attachments/assets/1aa08020-4231-42c5-9b81-bdf0633a99f8" />
+<img width="1680" alt="Screenshot 2025-07-09 at 10 25 08 AM" src="https://github.com/user-attachments/assets/454d1cb4-afbc-445f-9564-9012051b4c95" />
 
 ### 🔧 Tech Stack
 - **[Leaflet.js](https://leafletjs.com/)** for interactive maps  
